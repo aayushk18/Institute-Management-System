@@ -1,0 +1,76 @@
+import mongoose from "mongoose";
+
+const newregistrationSchema = new mongoose.Schema({
+
+    StudentClass: { type: String },
+    firstName: { type: String },
+    midName: { type: String },
+    lastName: { type: String },
+    gender: { type: String },
+    dob: { type: Date },
+    nationality: { type: String },
+    category: { type: String },
+    subCategory: { type: String },
+    quota: { type: String },
+    motherTongue: { type: String },
+    religion: { type: String },
+    email: { type: String },
+    phone: { type: String },
+    altphone: { type: String },
+    aadhar: { type: String },
+
+    fatherFirstName: { type: String },
+    fatherMidName: { type: String },
+    fatherLastName: { type: String },
+    fatherPhone: { type: String },
+    fatherEmail: { type: String },
+    fatherOccupation: { type: String },
+    fatherOfficeAddress: { type: String },
+    fatherQualification: { type: String },
+    fatherCollegeName: { type: String },
+    fatherCollegeAddress: { type: String },
+    fatherGraduationYear: { type: String },
+    fatherGraduationCertificate: { type: String },
+
+    motherFirstName: { type: String },
+    motherMidName: { type: String },
+    motherLastName: { type: String },
+    motherPhone: { type: String },
+    motherEmail: { type: String },
+    motherOccupation: { type: String },
+    motherOfficeAddress: { type: String },
+    motherQualification: { type: String },
+    motherCollegeName: { type: String },
+    motherCollegeAddress: { type: String },
+    motherGraduationYear: { type: String },
+    motherGraduationCertificate: { type: String },
+
+    guardianFirstName: { type: String },
+    guardianMidName: { type: String },
+    guardianLastName: { type: String },
+    guardianPhone: { type: String },
+    guardianEmail: { type: String },
+    guardianRelation: { type: String },
+    guardianOccupation: { type: String },
+    guardianOfficeAddress: { type: String },
+    guardianQualification: { type: String },
+    guardianCollegeName: { type: String },
+    guardianCollegeAddress: { type: String },
+    guardianGraduationYear: { type: String },
+    guardianGraduationCertificate: { type: String },
+
+    currentAddress: { type: String },
+    permanentAddress: { type: String },
+    hometown: { type: String },
+
+    previousSchoolLastClass: { type: String },
+    previousSchoolName: { type: String },
+    previousSchoolLocation: { type: String },
+    previousSchoolLeavingYear: { type: String },
+    previousSchoolLastClassMarksheet: { type: String },
+    previousSchoolTransferCertificate: { type: String },
+
+
+})
+
+export const NewRegistration = mongoose.model("NewRegistration", newregistrationSchema)
