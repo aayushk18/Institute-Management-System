@@ -92,19 +92,19 @@ const AdminHomepage = () => {
 
 
                 <div className="bg-white rounded-lg border-t-1 shadow-md border-gray-200 border p-4 text-center">
-                    <h2 className="text-xl font-bold">Total Students</h2>
+                    <h2 className="text-lg font-bold">Total Students</h2>
                     <p className="text-2xl">{totalPerson.TotalStudents}</p>
                 </div>
                 <div className="bg-white rounded-lg border-t-1 shadow-md border-gray-200 border p-4 text-center">
-                    <h2 className="text-xl font-bold"> Total Teachers</h2>
+                    <h2 className="text-lg font-bold"> Total Teachers</h2>
                     <span className="text-2xl">{totalPerson.TotalTeachers}</span>
                 </div>
                 <div className="bg-white rounded-lg border-t-1 shadow-md border-gray-200 border p-4 text-center">
-                    <h2 className="text-xl font-bold">TotalStudents</h2>
+                    <h2 className="text-lg font-bold">TotalStudents</h2>
                     <span className="text-2xl">{totalPerson.TotalEmployees}</span>
                 </div>
                 <div className="bg-white rounded-lg border-t-1 shadow-md border-gray-200 border p-4 text-center">
-                    <h2 className="text-xl font-bold">Total Employyes</h2>
+                    <h2 className="text-lg font-bold">Total Employyes</h2>
                     <span className="text-2xl">{totalPerson.TotalStudents}</span>
                 </div>
 

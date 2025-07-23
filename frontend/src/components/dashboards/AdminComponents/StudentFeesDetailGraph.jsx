@@ -1,5 +1,3 @@
-// FeeStatusRingChart.jsx
-
 import React, { useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import {
@@ -46,7 +44,7 @@ const StudentFeesDetailGraph = () => {
 
     return (
         <div className="max-w-sm mx-auto bg-white p-4 ">
-            <h2 className="text-xl font-semibold text-center mb-4">Fees Status</h2>
+            <h2 className="text-lg font-semibold text-center mb-4">Fees Status</h2>
 
 
             <Doughnut data={data} options={options} />

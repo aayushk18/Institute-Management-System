@@ -43,24 +43,24 @@ const AdminDashboard = () => {
             <div className='w-full h-screen '>
 
 
-                <div className='bg-white justify-between content-center  flex flex-row mb-1 h-20 gap-5 shadow-md shadow-gray-200  p-5 w-full'>
+                <div className='bg-white justify-between content-center  flex flex-row mb-1 h-16 gap-5 shadow-md shadow-gray-200  p-5 w-full'>
 
                     <div className='content-center pl-10'>
                         <input type="search" name="" placeholder='Search....' id="" />
                     </div>
 
-                    <div className='flex flex-row gap-5  content-center'>
+                    <div className='flex flex-row gap-5   content-center'>
                         <div className='content-center '>
-                            <span className='text-2xl font-semibold self-center text-gray-500'>Aman Singh</span>
+                            <span className='text-xl font-semibold self-center text-gray-500'>Aman Singh</span>
 
                         </div>
 
-                        <div className="relative" ref={dropdownRef}>
+                        <div className="relative   place-items-center  " ref={dropdownRef}>
                             <div
                                 className="bg-gray-500 p-1 rounded-full cursor-pointer hover:bg-gray-600 transition"
                                 onClick={() => setIsOpen(!isOpen)}
                             >
-                                <User className="text-white size-8" />
+                                <User className="text-white    size-6" />
                             </div>
 
                             {isOpen && (

@@ -1,9 +1,29 @@
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import CropProfileImage from '../../utils/imgConfig/CropProfileImage';
+import { useAdminStore } from '../../utils/useAuthStore';
+import toast from 'react-hot-toast';
 
 
 const NewRegistration1 = () => {
+
+    const { setStudentpic, updateRegistrationForm1 } = useAdminStore()
+
+
+    const [studentsData, setstudentsData] = useState([]);
+    const location = useLocation();
+    const state = location.state;
+    const stu = state?.pass;
+
+    const student = stu
+
+    const navigate = useNavigate()
+
+
+
+
+    console.log(student);
+
 
 
 
@@ -15,7 +35,12 @@ const NewRegistration1 = () => {
         };
     });
     const [selectedClass, setSelectedClass] = useState('');
+
+
     const [selectedSection, setSelectedSection] = useState('');
+
+    const formData = new FormData()
+
     const [form, setForm] = useState({
         StudentClass: '',
         firstName: '',
@@ -32,7 +57,7 @@ const NewRegistration1 = () => {
         email: '',
         phone: '',
         altphone: '',
-        aadhar: null,
+        bloodGroup: '',
 
         fatherFirstName: '',
         fatherMidName: '',
@@ -45,7 +70,7 @@ const NewRegistration1 = () => {
         fatherCollegeName: '',
         fatherCollegeAddress: '',
         fatherGraduationYear: '',
-        fatherGraduationCertificate: null,
+        // fatherGraduationCertificate: '',
 
         motherFirstName: '',
         motherMidName: '',
@@ -58,7 +83,7 @@ const NewRegistration1 = () => {
         motherCollegeName: '',
         motherCollegeAddress: '',
         motherGraduationYear: '',
-        motherGraduationCertificate: null,
+        // motherGraduationCertificate: '',
 
         guardianFirstName: '',
         guardianMidName: '',
@@ -72,7 +97,7 @@ const NewRegistration1 = () => {
         guardianCollegeName: '',
         guardianCollegeAddress: '',
         guardianGraduationYear: '',
-        guardianGraduationCertificate: null,
+        // guardianGraduationCertificate: '',
 
         currentAddress: '',
         permanentAddress: '',
@@ -82,8 +107,8 @@ const NewRegistration1 = () => {
         previousSchoolName: '',
         previousSchoolLocation: '',
         previousSchoolLeavingYear: '',
-        previousSchoolLastClassMarksheet: null,
-        previousSchoolTransferCertificate: null,
+        // previousSchoolLastClassMarksheet: '',
+        // previousSchoolTransferCertificate: '',
 
         // ID proof
     });
@@ -95,14 +120,16 @@ const NewRegistration1 = () => {
         { label: 'Date of birth', key: 'dob', type: 'date' },
         { label: 'Nationality', key: 'nationality', type: 'select', optons: [{ val: "Select" }, { val: "Indian" }, { val: "NRI" }, { val: "Other" }] },
         { label: 'Category', key: 'category', type: 'select', optons: [{ val: "Select" }, { val: "General" }, { val: "OBC" }, { val: "SC" }, { val: "ST" }] },
-        { label: 'Sub-category', key: 'subCategory', type: 'select', optons: [{ val: "Select" }, { val: "PWD" }, { val: "EWS" }, { val: "PWD + EWS" }] },
-        { label: 'Qouta', key: 'quota', type: 'select', optons: [{ val: "Select" }, { val: "Defence" }, { val: "Sports" }, { val: "Freedom Fighter" }, { val: "Kashmiri Migrant" }, { val: "Minority" }] },
+        { label: 'Sub-category', key: 'subCategory', type: 'select', optons: [{ val: "Select" }, { val: "None" }, { val: "PWD" }, { val: "EWS" }, { val: "PWD + EWS" }] },
+        { label: 'Qouta', key: 'quota', type: 'select', optons: [{ val: "Select" }, { val: "None" }, { val: "Defence" }, { val: "Sports" }, { val: "Freedom Fighter" }, { val: "Kashmiri Migrant" }, { val: "Minority" }] },
         { label: 'Religion', key: 'religion', type: 'text' },
         { label: 'Mother Tongue', key: 'motherTongue', type: 'text' },
         { label: 'Email', key: 'email', type: 'email' },
         { label: 'Phone no', key: 'phone', type: 'text' },
-        { label: 'Alternative Phone no', key: 'altphone', type: 'text' },
-        { label: 'Aadhar Card', key: 'aadhar', type: 'file' },
+        { label: 'Blood Group', key: 'bloodGroup', type: 'select', optons: [{ val: "Select" }, { val: "A+" }, { val: "A-" }, { val: "B+" }, { val: "B-" }, { val: "AB+" }, { val: "AB-" }, { val: "O+" }, { val: "O-" }] },
+
+        // { label: 'Alternative Phone no', key: 'altphone', type: 'text' },
+        // { label: 'Aadhar Card', key: 'aadhar', type: 'file' },
 
 
 
@@ -127,9 +154,40 @@ const NewRegistration1 = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
+        // Filter non-empty values
+        const updatedForm = Object.fromEntries(
+            Object.entries(form).filter(([key, value]) => value !== '')
+        );
+
+
+        if (Object.keys(updatedForm).length === 0) {
+            toast.success("No data to submit ");
+            navigate(`/admin/admissions/registration-form/page-2/${student.firstName}-${student.StudentClass}-${student.phone}`, { state: { pass: student } })
+
+        } else {
+
+            updatedForm.checkStudentClass = student.StudentClass;
+            updatedForm.checkphone = student.phone;
+            updatedForm.checkfirstName = student.firstName;
+            updatedForm.checkdob = student.dob;
+
+
+
+            const success = await updateRegistrationForm1(updatedForm)
+            console.log(updatedForm);
+
+            if (success == true) {
+                navigate(`/admin/admissions/registration-form/page-2/${student.firstName}-${student.StudentClass}-${student.phone}`, { state: { pass: student } })
+                toast.success("Student Profile Updated Successfully ");
+
+            }
+            console.log("Filtered form with non-empty values:", updatedForm);
+        }
+
+
     }
 
 
@@ -146,83 +204,80 @@ const NewRegistration1 = () => {
                     </h2>
 
                     <form
-                        onSubmit={(e) => handleSubmit(e)}
+                        // onSubmit={(e) => handleSubmit(e)}
                         className="bg-white w-full p-6 sm:p-8 md:p-10 rounded-2xl shadow-lg ">
                         {/* Personal Details */}
                         <section className="mb-8">
-                            <h3 className="text-md text-center sm:text-lg font-semibold text-gray-700 mb-6">Student's Details</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                                <div></div>
-                                <div>
-                                </div>
-                                <div>
-                                    <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">Class</label>
-                                    <select
-                                        value={form.StudentClass}
-                                        onChange={(e) => setForm({ ...form, StudentClass: e.target.value })}
-                                        className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
-                                    >
-                                        <option value="">Select class</option>
-                                        {classSections.map(({ class: cls }) => (
-                                            <option key={cls} value={cls}>{cls}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">ID Proof</label>
-                                    <select
-                                        value={form.lastClass}
-                                        // onChange={(e) => setForm({ ...form, lastClass: e.target.value })}
-                                        className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
-                                    >
-                                        <option value="">Select Document</option>
 
-                                        <option  >Aadhar Card</option>
-                                        <option  >Birth Certificate</option>
-                                        <option  >Other Document</option>
+                            <div className='w-full mb-15 pb-5  border-gray-300 border-b-2 flex flex-row place-items-center  justify-between'>
 
-
-                                    </select>
+                                <div className=' h-full flex justify-center items-center text-center'>
+                                    <h3 className="text-xl self-center font-semibold text-gray-700 ">
+                                        Student's Details
+                                    </h3>
                                 </div>
 
-                                <div className=" items-center justify-center col-span-1 row-span-3  bg-gray-100">
-                                    <div className="bg-white flex flex-col justify-between p-2 px-4 h-full  rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200  w-full">
 
-                                        <h2 className="text-md font-bold mt-2   text-center">Student's Image</h2>
+                                <div className=' flex flex-row gap-5'>
 
-                                        {selectedImageStudent && (
-                                            <div className="mt-2 justify-items-center">
-                                                <img
-                                                    src={selectedImageStudent}
-                                                    alt="Uploaded"
-                                                    className="w-35 h-35 rounded-lg shadow-md"
-                                                />
-                                            </div>
-                                        )}
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleImageChangeStudent}
-                                            className="block relative  w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 p-2"
-                                        />
-                                        <button className='p-1 bg-gray-500 m-1 font-semibold text-sm rounded-md text-white hover:bg-gray-600'>Update photo
-                                        </button>
+                                    <div>
+
+                                        <select
+                                            value={form.StudentClass || student?.StudentClass || ''}
+                                            onChange={(e) => setForm({ ...form, StudentClass: e.target.value })}
+                                            className="w-full p-2 text-gray-600 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                        >
+                                            <option value="">Select class</option>
+                                            {classSections.map(({ class: cls }) => (
+                                                <option key={cls} value={cls}>
+                                                    {cls}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <select
+                                            value={form.lastClass}
+                                            // onChange={(e) => setForm({ ...form, lastClass: e.target.value })}
+                                            className="w-full p-2 rounded-md border border-gray-300 text-gray-600 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                        >
+                                            <option value="">Select Document</option>
+
+                                            <option  >Aadhar Card</option>
+                                            <option  >Birth Certificate</option>
+                                            <option  >Other Document</option>
 
 
-
-
-
+                                        </select>
                                     </div>
                                 </div>
 
-                                <div className=" items-center justify-center col-span-1 row-span-3  bg-gray-100">
+
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+
+
+
+
+
+
+                                <div className=" items-center justify-center col-span-1  row-span-3  bg-gray-100">
                                     <div className="bg-white flex flex-col justify-between p-2 px-4 h-full  rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200  w-full">
+
+                                        <h2 className="text-md font-bold mt-2  text-gray-600 text-center">Student's Image</h2>
 
                                         <div className='p-1'>
-                                            <CropProfileImage />
+                                            <CropProfileImage student={student} />
                                         </div>
+
+
+
+
+
                                     </div>
                                 </div>
+
+
 
 
                                 {/* {docProofStudent.map(({ label, key, type, colSpan = 1 }) => (
@@ -256,7 +311,7 @@ const NewRegistration1 = () => {
 
 
 
-                                {personalDetails.map(({ label, key, type, colSpan = 1, optons }) => (
+                                {/* {personalDetails.map(({ label, key, type, colSpan = 1, optons }) => (
                                     <div key={key} className={`col-span-${colSpan}`}>
                                         <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">
                                             {label}
@@ -284,26 +339,84 @@ const NewRegistration1 = () => {
                                             />
                                         )}
                                     </div>
+                                ))} */}
+
+
+                                {personalDetails.map(({ label, key, type, colSpan = 1, optons }) => (
+                                    <div key={key} className={`col-span-${colSpan} text-gray-600`}>
+                                        <label className="block text-gray-600 mb-2 text-sm sm:text-base font-medium">
+                                            {label}
+                                        </label>
+
+                                        {type === 'select' ? (
+                                            <select
+                                                value={form[key] || student?.[key] || ''}
+                                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                            >
+                                                {optons?.map((option, idx) => (
+                                                    <option key={idx} value={option.val}>
+                                                        {option.val}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <input
+                                                type={type}
+                                                value={
+                                                    type === 'date'
+                                                        ? form[key] || student?.[key] || ''
+                                                        : form[key] || ''
+                                                }
+                                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                                placeholder={type === 'date' ? '' : student?.[key] || `Enter ${label.toLowerCase()}`}
+                                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                            />
+                                        )}
+                                    </div>
                                 ))}
 
-                                {/* {personalDetails.map(({ label, key, type, colSpan = 1 }) => (
-                            <div key={key} className={`col-span-${colSpan}`}>
-                                <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">{label}</label>
-                                <input
 
 
 
-                                    type={type}
-                                    value={form[key] || ''}
-                                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                                    placeholder={`Enter ${label.toLowerCase()}`}
-                                    className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                {/*  {personalDetails.map(({ label, key, type, colSpan = 1, optons }) => (
+                                    <div key={key} className={`col-span-${colSpan}`}>
+                                        <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">
+                                            {label}
+                                        </label>
 
-                                />
-                            </div>
+                                        {type === 'select' ? (
+                                            <select
+                                                value={form[key] || stu?.[key] || ''}
+                                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                            >
+                                                {optons?.map((option, idx) => (
+                                                    <option key={idx} value={option.val}>
+                                                        {option.val}
+                                                    </option>
+                                                ))}
+                                            </select>
+
+                                        ) : (
+                                            <input
+                                                type={type}
+                                                value={form[key] || ''}
+                                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                                placeholder={stu?.[key] || `Enter ${label.toLowerCase()}`}
+                                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
+                                            />
+                                        )}
+                                    </div>
+                                ))} */}
 
 
-                        ))} */}
+
+
+
+
+
+
 
 
 
@@ -346,11 +459,15 @@ const NewRegistration1 = () => {
                         )} */}
                             </div>
 
-                            <div className='m-5 p-5 bg-gray-500 w-fit text-white rounded-2xl'>
+                            <div className='mt-10 text-lg p-5 font-semibold bg-gray-500 w-full text-center text-white rounded-md'>
 
-                                <NavLink to='/admin/admissions/registration-form/page-2'>
+
+                                <button
+                                    onClick={(e) => handleSubmit(e)}>
                                     Submit & Next
-                                </NavLink>
+                                </button>
+
+
                             </div>
                         </section>
 
@@ -361,7 +478,7 @@ const NewRegistration1 = () => {
 
 
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -12,14 +12,14 @@ const StaffAdminComponent = () => {
 
 
 
+            <div className='flex flex-row gap-5 p-1 w-full bg-white border-b-2 border-gray-200 px-6 '>
 
-            <div className='p-10 flex flex-row w-full justify-between '>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='academic-staff'>Academic Staff </NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='general-staff'>General Staff</NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='attendance' >Attendance</NavLink >
 
-                <NavLink className='bg-green-500 text-white p-5 text-2xl rounded-2xl' to='new-teacher'>Add New Teaching Faculty </NavLink>
-                <NavLink className='bg-orange-500 text-white p-5 text-2xl rounded-2xl' to='new-staff'>Add other Staff </NavLink>
+            </div >
 
-
-            </div>
             <div className='m-10'>
                 <Outlet />
             </div>

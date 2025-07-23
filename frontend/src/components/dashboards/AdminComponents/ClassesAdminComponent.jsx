@@ -1,127 +1,228 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAdminStore } from '../../utils/useAuthStore';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-// Sample student data
-const studentsData = [
-    { name: 'anjali', rollno: 1, class: '1st', section: 'A' },
-    { name: 'Bablu', rollno: 2, class: '1st', section: 'B' },
-    { name: 'aakash', rollno: 3, class: '2nd', section: 'A' },
-    { name: 'vipul', rollno: 3, class: '2nd', section: 'A' },
-    { name: 'chaman', rollno: 3, class: '2nd', section: 'A' },
-    { name: 'vinaash', rollno: 3, class: '2nd', section: 'A' },
-    { name: 'vilesh', rollno: 3, class: '2nd', section: 'A' },
-    { name: 'David', rollno: 4, class: '2nd', section: 'C' },
-    { name: 'Sameer', rollno: 5, class: '12th', section: 'F' },
-    // Add more as needed
-];
 
-const classes = [
-    '1st', '2nd', '3rd', '4th', '5th', '6th',
-    '7th', '8th', '9th', '10th', '11th', '12th'
-];
-
-const sections = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 const ClassesAdminComponent = () => {
-    const [selectedClass, setSelectedClass] = useState(null);
-    const [selectedSection, setSelectedSection] = useState(null);
 
-    const handleClassClick = (cls) => {
-        setSelectedClass(cls);
-        setSelectedSection(null);
-    };
 
-    const handleSectionClick = (sec) => {
-        setSelectedSection(sec);
-    };
-
-    const filteredStudents = studentsData.filter((student) => {
-        return (
-            student.class === selectedClass &&
-            student.section === selectedSection
-        );
-    });
 
     return (
+        <div className="w-full h-full p-5 text-white">
 
-
-        <div className='w-fit overflow-scroll no-scrollbar lg:scrollbar h-150'>
-
-            <div className='p-5'>
-                <h2 className='text-gray-500 text-2xl m-5'>Classes</h2>
-                <div className='grid grid-cols-12 gap-5 mb-5 w-full'>
-                    {classes.map((cls) => (
-                        <button
-                            key={cls}
-                            onClick={() => handleClassClick(cls)}
-
-
-
-
-                            className={cls === selectedClass ? 'p-2.5 rounded-full cursor-pointer inset-shadow-sm inset-shadow-gray-400' : 'p-2.5 rounded-full text-xl cursor-pointer shadow-md shadow-gray-400'}
-                        >
-                            {cls}
-                        </button>
-                    ))}
-                </div>
-
-                {selectedClass && (
-                    <div className='pt-5'>
-                        <h3 className='text-gray-500 text-2xl m-5'>Sections for {selectedClass}</h3>
-                        <div className='flex flex-row gap-5 mb-5 w-full'>
-                            {sections.map((sec) => (
-                                <button
-                                    key={sec}
-                                    onClick={() => handleSectionClick(sec)}
-                                    className={sec === selectedSection ? 'p-2.5 rounded-full cursor-pointer inset-shadow-sm inset-shadow-gray-400' : 'p-2.5 rounded-full text-xl cursor-pointer shadow-md shadow-gray-400'}
-
-                                >
-                                    {sec}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {selectedClass && selectedSection && (
-                    <div className='w-full '>
-                        <h3 className='my-5 text-2xl'>Students in {selectedClass} - Section {selectedSection}</h3>
-                        {filteredStudents.length > 0 ? (
-                            <ul>
-                                {filteredStudents.map((student, index) => (
-
-
-                                    <li key={index}>
-
-
-                                        <div className=' flex flex-row gap-5 inset-shadow-sm inset-shadow-gray-400 p-5  m-5 rounded-2xl'>
-
-                                            <div>
-                                                <img className='rounded-2xl w-2/3' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIVSd2UkGacggAAzbGljskwLIm4J0Nu1am_jTXY4aOHTuQjVHzEcGgoCtaXNpWytjDVHI&usqp=CAU" alt="" srcset="" />
-                                            </div>
-                                            <div className='flex flex-col'>
-                                                <span className='text-xl my-3'>{student.name}</span>
-                                                <span>Roll no: {student.rollno}</span>
-                                                <span>Class: {selectedClass}</span>
-                                                <span>Section: {selectedSection}</span>
-
-                                            </div>
-
-
-                                        </div>
-
-                                    </li>
-
-
-                                ))}
-                            </ul>
-                        ) : (
-                            <p className='text-gray-700 text-5xl p-10'>No students found.</p>
-                        )}
-                    </div>
-                )}
-            </div>
-        </div >
+            <Outlet />
+        </div>
     );
 };
 
 export default ClassesAdminComponent;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import { NavLink, useNavigate } from 'react-router-dom';
+// import { useAdminStore } from '../../utils/useAuthStore';
+
+// const allData = [
+//     { sno: 1, rollno: '101', firstName: 'Aman Kumar', fatherName: 'Rajesh Kumar', StudentClass: '1', section: 'A', active: true },
+//     { sno: 2, rollno: '102', firstName: 'Riya Singh', fatherName: 'Dinesh Singh', StudentClass: '2', section: 'B', active: false },
+//     { sno: 3, rollno: '103', firstName: 'Vikram Das', fatherName: 'Suresh Das', StudentClass: '1', section: 'B', active: true },
+//     { sno: 4, rollno: '104', firstName: 'Sneha Gupta', fatherName: 'Mahesh Gupta', StudentClass: '3', section: 'C', active: true },
+//     // Add more mock data for pagination if needed
+// ];
+
+// const ClassesAdminComponent = () => {
+//     const navigate = useNavigate();
+//     const { getAllStudents, resetRollno } = useAdminStore();
+
+//     const [studentsData, setstudentsData] = useState([]);
+//     const [searchTerm, setSearchTerm] = useState('');
+//     const [selectedClass, setSelectedClass] = useState('');
+//     const [selectedSection, setSelectedSection] = useState('');
+//     const [entriesPerPage, setEntriesPerPage] = useState(10);
+//     const [currentPage, setCurrentPage] = useState(1);
+
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             const stu = await getAllStudents();
+//             if (!stu || stu.length === 0) {
+//                 setstudentsData(allData);
+//             } else {
+//                 setstudentsData(stu);
+//                 console.log(stu);
+
+//             }
+//         };
+//         fetchData();
+//     }, []);
+
+//     const classes = ['Nursery', 'LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+//     const sections = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+//     const filteredStudents = studentsData.filter(student => {
+//         const matchesSearch = `${student.rollno} ${student.firstName}${student.lastName || ''} ${student.fatherName}`.toLowerCase().includes(searchTerm.toLowerCase());
+//         const matchesClass = selectedClass ? student.StudentClass === selectedClass : true;
+//         const matchesSection = selectedSection ? student.section === selectedSection : true;
+//         return matchesSearch && matchesClass && matchesSection;
+//     });
+
+
+//     console.log(filteredStudents);
+
+
+//     const totalPages = Math.ceil(filteredStudents.length / entriesPerPage);
+//     const currentEntries = filteredStudents.slice((currentPage - 1) * entriesPerPage, currentPage * entriesPerPage);
+
+//     return (
+//         <div className="w-full h-full p-5 text-white">
+//             <div className="flex flex-row justify-between gap-4 mb-4">
+//                 <div className="flex flex-row gap-4">
+//                     <select
+//                         className="p-4 rounded-md bg-white  border-t-1 shadow-md border-gray-200 hover:bg-gray-50 border text-black"
+//                         value={selectedClass}
+//                         onChange={(e) => {
+//                             setSelectedClass(e.target.value);
+//                             setSelectedSection('');
+//                         }}>
+//                         <option value="">Select Class</option>
+//                         {classes.map(cls => <option key={cls} value={cls}>{cls}</option>)}
+//                     </select>
+
+//                     {selectedClass && (
+//                         <select
+//                             className="p-4 rounded-md  bg-white  border-t-1 shadow-md border-gray-200 border hover:bg-gray-50 text-black"
+//                             value={selectedSection}
+//                             onChange={(e) => setSelectedSection(e.target.value)}>
+//                             <option value="">Select Section</option>
+//                             {sections.map(sec => <option key={sec} value={sec}>{sec}</option>)}
+//                         </select>
+//                     )}
+
+//                     {selectedClass && selectedSection && (
+//                         <button onClick={() => resetRollno(selectedClass, selectedSection)} className="p-4 rounded-md bg-white  border-t-1 shadow-md border-gray-200 border text-black hover:bg-gray-50">
+//                             Reset Roll no of {selectedClass} {selectedSection}
+//                         </button>
+//                     )}
+//                 </div>
+
+//                 <div className="flex flex-row gap-4">
+//                     <input
+//                         type="text"
+//                         placeholder="Search..."
+//                         className="p-4 rounded-md bg-white  border-t-1 shadow-md border-gray-200 border text-black"
+//                         value={searchTerm}
+//                         onChange={(e) => setSearchTerm(e.target.value)}
+//                     />
+//                     <NavLink to='/admin/student/new-student' className="p-4 bg-gray-500 text-white rounded-md hover:bg-gray-600">Add New Student</NavLink>
+//                 </div>
+//             </div>
+
+
+
+
+
+
+//             <div className='p-5  bg-white  border-t-1 shadow-md border-gray-200 border rounded-lg'>
+
+//                 <div className="flex justify-between items-center mb-2">
+
+//                     {/* <div className="text-black">
+//                         Showing {currentPage} out of {totalPages} pages
+//                     </div> */}
+//                     <div>
+//                         <label className="text-black mr-2">Entries per page:</label>
+//                         <select value={entriesPerPage} onChange={(e) => { setEntriesPerPage(parseInt(e.target.value)); setCurrentPage(1); }} className="p-2 border border-t-2 border-gray-200 shadow-md rounded-md text-black">
+//                             {[10, 20, 30, 50].map(num => <option key={num} value={num}>{num}</option>)}
+//                         </select>
+//                     </div>
+//                 </div>
+
+//                 <div className='h-120 overflow-scroll inset-shadow-gray-200 inset-shadow-sm border border-b-2 border-b-gray-100 rounded-lg'>
+
+
+//                     <table className="w-full border border-white">
+//                         <thead>
+//                             <tr className="bg-gray-500">
+//                                 <th className="p-2 border-b">S.No</th>
+//                                 <th className="p-2 border-b">Roll No</th>
+//                                 <th className="p-2 border-b">Name</th>
+//                                 <th className="p-2 border-b">Father Name</th>
+//                                 <th className="p-2 border-b">Class Section</th>
+//                                 <th className="p-2 border-b">Edit</th>
+//                                 <th className="p-2 border-b">Status</th>
+//                             </tr>
+//                         </thead>
+//                         <tbody>
+//                             {currentEntries.map((student, index) => (
+//                                 <tr key={student.sno} className="text-center text-black">
+//                                     <td className="p-2 border-b">{(currentPage - 1) * entriesPerPage + index + 1}</td>
+//                                     <td className="p-2 border-b">{student.rollno}</td>
+//                                     <td className="p-2  cursor-pointer border-b">
+//                                         <button onClick={() => navigate(`/admin/student/${student.firstName}-${student.lastName}-${student.rollno}`, { state: { pass: student } })} >{student.firstName} {student.lastName}</button>
+//                                     </td>
+//                                     <td className="p-2 cursor-pointer border-b">
+//                                         <button onClick={() => navigate(`/admin/student/${student.firstName}-${student.lastName}-${student.rollno}`, { state: { pass: student } })} >{student.fatherName}</button>
+//                                     </td>
+//                                     <td className="p-2 border-b">{student.StudentClass} {student.section}</td>
+//                                     <td className="p-2 border-b">
+//                                         <button onClick={() => navigate(`/admin/student/update-student/${student.firstName}-${student.lastName}-${student.rollno}`, { state: { pass: student } })} className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md">Edit</button>
+//                                     </td>
+//                                     <td className="p-2 border-b">
+//                                         <span className={`h-3 w-3 inline-block rounded-full ${student.active ? 'bg-green-500' : 'bg-red-500'}`}></span>
+//                                     </td>
+//                                 </tr>
+//                             ))}
+//                         </tbody>
+//                     </table>
+
+
+//                 </div>
+
+//                 <div className="flex justify-between items-center mt-4">
+//                     <div className="text-black">
+//                         Showing {currentEntries.length} entries out of {filteredStudents.length}
+//                     </div>
+//                     <div className="flex gap-2">
+//                         <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">Previous</button>
+//                         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+//                             <button key={page} onClick={() => setCurrentPage(page)} className={`px-3 py-1 rounded ${currentPage === page ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}>{page}</button>
+//                         ))}
+//                         <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">Next</button>
+//                     </div>
+//                 </div>
+//             </div>
+
+
+
+//         </div>
+//     );
+// };
+
+// export default ClassesAdminComponent;
+
+
+

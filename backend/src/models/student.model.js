@@ -6,6 +6,10 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    midName: {
+        type: String,
+        required: true,
+    },
     lastName: {
         type: String,
         required: true,
@@ -38,7 +42,7 @@ const studentSchema = new mongoose.Schema({
     },
 
     dob: {
-        type: Date
+        type: String
     },
     loginID: {
         type: String,

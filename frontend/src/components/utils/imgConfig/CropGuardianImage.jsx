@@ -4,8 +4,10 @@ import Slider from '@mui/material/Slider';
 
 import { v4 as uuidv4 } from 'uuid';
 import getCroppedImg from './getCroppedImg';
+import toast from 'react-hot-toast';
+import { useAdminStore } from '../useAuthStore';
 
-const CropGuardianImage = () => {
+const CropGuardianImage = ({ student }) => {
     const [imageSrc, setImageSrc] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
@@ -16,6 +18,10 @@ const CropGuardianImage = () => {
     const onCropComplete = useCallback((_, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
+
+    const formData = new FormData()
+
+    const { setGuardianPic } = useAdminStore()
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -30,7 +36,9 @@ const CropGuardianImage = () => {
         reader.readAsDataURL(file);
     };
 
-    const handleCropSubmit = async () => {
+    const handleCropSubmit = async (e) => {
+        e.preventDefault();
+
         try {
             const croppedImg = await getCroppedImg(imageSrc, croppedAreaPixels);
             setCroppedImage(croppedImg);
@@ -42,14 +50,55 @@ const CropGuardianImage = () => {
 
 
 
+    const finalSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Convert base64 cropped image to a Blob
+            const blob = await fetch(croppedImage).then(res => res.blob());
+
+            // Convert Blob to File (with .jpg extension)
+            const fileName = `${student.firstName}_${student.StudentClass}_${student.phone}_${uuidv4()}.jpg`;
+            const file = new File([blob], fileName, { type: 'image/jpeg' });
+
+            // Create a FormData object
+
+            formData.append('file', file);
+
+            // Add student info
+            formData.append('firstName', student.firstName);
+            formData.append('email', student.email);
+            formData.append('StudentClass', student.StudentClass);
+            // formData.append('_id', student._id);
+
+            // 🔁 Example API call (adjust endpoint and method as needed)
+
+
+            const success = await setGuardianPic(formData)
+            if (success == true) {
+                setCroppedImage(false)
+            }
+
+        } catch (error) {
+            console.error('Upload error:', error);
+            toast.error('Image upload failed.');
+        }
+    };
+
+
+
+
+
 
     return (
         <div className=' bg-white w-full h-full rounded-2xl '>
-            <div className=' border-2 rounded-xl border-gray-300'>
-                <div className='w-full p-3'>
-
-                    <div>
-                        <input type="file" accept="image/*" onChange={handleImageChange} />
+            <div className=' '>
+                <div className='w-full flex flex-col justify-items-center p-3'>
+                    {!showCropper && !croppedImage && (<img className='h-40 self-center rounded-sm w-30' src={`http://localhost:3000/pics/${student.guardianPic}`} />)}
+                    <div className='w-full overflow-hidden'>
+                        <input
+                            className="block relative  w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 p-2"
+                            type="file" accept="image/*" onChange={handleImageChange} />
 
                         {showCropper && (
                             <>
@@ -98,7 +147,7 @@ const CropGuardianImage = () => {
                                         step={0.1}
                                         onChange={(e, z) => setZoom(z)}
                                     />
-                                    <button className='p-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition duration-300' onClick={handleCropSubmit}>Set Image</button>
+                                    <button className='p-1 bg-gray-500 m-1 font-semibold text-sm rounded-md text-white hover:bg-gray-600 w-full transition duration-300' onClick={(e) => handleCropSubmit(e)}>Set Image</button>
                                 </div>
                             </>
                         )}
@@ -106,14 +155,14 @@ const CropGuardianImage = () => {
 
 
                     {croppedImage && (
-                        <div className='w-auto h-40'>
-                            <h3>Cropped Image Preview:</h3>
+                        <div className='w-auto h-40 rounded-sm'>
+
                             <img className='w-fit h-30'
                                 src={croppedImage}
                                 alt="Cropped"
                                 style={{ maxWidth: '100%', border: '1px solid #ccc' }}
                             />
-                            <button className='p-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition duration-300'>Submit</button>
+                            <button onClick={(e) => finalSubmit(e)} className='p-1 bg-gray-500 m-1 font-semibold text-sm w-full rounded-md text-white hover:bg-gray-600'>Submit</button>
                         </div>
                     )}
                 </div>

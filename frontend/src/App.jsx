@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { useAuthStore } from './components/utils/useAuthStore'
+import { useAdminStore, useAuthStore } from './components/utils/useAuthStore'
 import AdminDashboard from './components/dashboards/AdminDashboard'
 import { StaffDashboard } from './components/dashboards/StaffDashboard'
 import StudentDashboard from './components/dashboards/StudentDashboard'
@@ -14,7 +14,6 @@ import AddStudent from './components/dashboards/AdminComponents/AddStudent'
 import StaffAdminComponent from './components/dashboards/AdminComponents/StaffAdminComponent'
 
 import AddTeacher from './components/dashboards/AdminComponents/AddTeacher'
-import { AddStaff } from './components/dashboards/AdminComponents/AddStaff'
 import AcademicsAdminDashboard from './components/dashboards/AdminComponents/AcademicsAdminDashboard'
 import SettingsAdminComponent from './components/dashboards/AdminComponents/SettingsAdminComponent'
 import LibraryAdminComponent from './components/dashboards/AdminComponents/LibraryAdminComponent'
@@ -22,7 +21,6 @@ import NoticeAdminComponent from './components/dashboards/AdminComponents/Notice
 import ReportAdminComponent from './components/dashboards/AdminComponents/ReportAdminComponent'
 import PaymentAdminComponent from './components/dashboards/AdminComponents/PaymentAdminComponent'
 import ClassesAdminComponent from './components/dashboards/AdminComponents/ClassesAdminComponent'
-import SubjectAdmin from './components/dashboards/AdminComponents/SubjectAdmin'
 import TimetableAdmin from './components/dashboards/AdminComponents/TimetableAdmin'
 import AttendanceAdmin from './components/dashboards/AdminComponents/AttendanceAdmin'
 import ExaminationAdmin from './components/dashboards/AdminComponents/ExaminationAdmin'
@@ -44,6 +42,20 @@ import NewRegistration2 from './components/dashboards/AdminComponents/NewRegistr
 import NewRegistration3 from './components/dashboards/AdminComponents/NewRegistration3'
 import NewRegistration4 from './components/dashboards/AdminComponents/NewRegistration4'
 import NewRegistrationForm from './components/dashboards/AdminComponents/NewRegistrationForm'
+import NewRegistrationDetails from './components/dashboards/AdminComponents/NewRegistrationDetails'
+import StaffTable from './components/dashboards/AdminComponents/StaffTable'
+import AddNewFaculty from './components/dashboards/AdminComponents/Faculty/AddNewFaculty'
+import AddNewFaculty1 from './components/dashboards/AdminComponents/Faculty/AddNewFaculty1'
+import AddNewFaculty2 from './components/dashboards/AdminComponents/Faculty/AddNewFaculty2'
+import AddNewFaculty3 from './components/dashboards/AdminComponents/Faculty/AddNewFaculty3'
+import FacultyFeedback from './components/dashboards/AdminComponents/Faculty/FacultyFeedback'
+import FacultyAttendancePage from './components/dashboards/AdminComponents/Faculty/FacultyAttendancePage'
+import AdminStudentAttendance from './components/dashboards/AdminComponents/Student/AdminStudentAttendance'
+import AcademicActiveClasses from './components/dashboards/AdminComponents/Academic/AcademicActiveClasses'
+import AcademicEditClasses from './components/dashboards/AdminComponents/Academic/AcademicEditClasses'
+import ExaminationDatesheet from './components/dashboards/AdminComponents/Academic/Examination/ExaminationDatesheet'
+import SubjectAdmin from './components/dashboards/AdminComponents/Academic/Subjects/SubjectAdmin'
+
 
 
 
@@ -57,6 +69,8 @@ function App() {
 
 
   const { authUser, userType, checkAuth, isCheckAuth } = useAuthStore();
+
+  const { registrationForm } = useAdminStore()
 
 
   useEffect(() => {
@@ -89,7 +103,7 @@ function App() {
 
         <Route path='/' element={userType ? (userType == 'admin' ? <Navigate to='/admin' /> : (userType == 'teacher' ? <Navigate to='/staff' /> : (userType == 'student' ? <Navigate to='/student' /> : (authUser.userType == 'parent' ? <Navigate to='/parent' /> : <Navigate to='/login' />)))) : <Navigate to='/login' />}></Route>
         <Route path='/login' element={!userType ? <Login /> : <Navigate to='/' />} />\
-        <Route path='/admissions' element={<Login />} />
+        {/* <Route path='/admissions' element={<Login />} /> */}
 
         <Route path='/student' element={userType == 'student' ? <StudentDashboard /> : <Navigate to='/login' />} />
         <Route path='/admin' element={userType == 'admin' ? <AdminDashboard /> : <Navigate to='/login' />} >
@@ -101,34 +115,54 @@ function App() {
             <Route path='students' element={<StudentAdminHome />} />
             <Route path='new-student' element={<AddStudent />} />
             <Route path='update-student/:userid' element={<EditStudent />} />
+            <Route path='attendance' element={<AdminStudentAttendance />} />
+
 
           </Route>
-          <Route path='staff' element={<StaffAdminComponent />}>
-            <Route path='new-staff' element={<AddStaff />} />
+          <Route path='faculties' element={<StaffAdminComponent />}>
+            <Route path='all-staff' element={<StaffTable />} />
+            <Route path='new-staff' element={<AddNewFaculty />} />
+            <Route path='edit-staff-1' element={<AddNewFaculty1 />} />
+            <Route path='edit-staff-2' element={<AddNewFaculty2 />} />
+            <Route path='edit-staff-3' element={<AddNewFaculty3 />} />
+            <Route path='feedback' element={<FacultyFeedback />} />
+            <Route path='attendance' element={<FacultyAttendancePage />} />
 
             <Route path='new-teacher' element={<AddTeacher />} />
+
+
+
           </Route>
           <Route path='academics' element={<AcademicsAdminDashboard />}>
-            <Route path='classes' element={<ClassesAdminComponent />} />
+            <Route path='classes' element={<ClassesAdminComponent />} >
+              <Route path='' element={<AcademicActiveClasses />} ></Route>
+              <Route path='update-class' element={<AcademicEditClasses />} />
+
+            </Route>
             <Route path='subjects' element={<SubjectAdmin />} />
             <Route path='timetable' element={<TimetableAdmin />} />
             <Route path='attendance' element={<AttendanceAdmin />} />
-            <Route path='examination' element={<ExaminationAdmin />} />
+            <Route path='examination' element={<ExaminationAdmin />} >
+              <Route path='datesheet' element={<ExaminationDatesheet />} />
+            </Route>
           </Route>
           <Route path='notice' element={<NoticeAdminComponent />} />
           <Route path='library' element={<LibraryAdminComponent />} />
           <Route path='admissions' element={<AdminAdmissionRoutes />} >
             <Route path='' element={<AdminAdmissionsPanel />} ></Route>
             <Route path='set-registration-form' element={<AdminAdmissionRegistrationForm />} />
-            <Route path='new-registrations' element={<AdminNewRegistration />} />
+            <Route path='new-registrations' element={<AdminNewRegistration />} >
+            </Route>
 
             <Route path='registration-form' element={<AddNewStudentRegistration />} >
               <Route path='' element={<NewRegistrationForm />}>
               </Route>
-              <Route path='page-1' element={<NewRegistration1 />} />
-              <Route path='page-2' element={<NewRegistration2 />} />
-              <Route path='page-3' element={<NewRegistration3 />} />
-              <Route path='page-4' element={<NewRegistration4 />} />
+              <Route path='details/:userid' element={<NewRegistrationDetails />} />
+
+              <Route path='page-1/:userid' element={<NewRegistration1 />} />
+              <Route path='page-2/:userid' element={<NewRegistration2 />} />
+              <Route path='page-3/:userid' element={<NewRegistration3 />} />
+              {/* <Route path='page-4/:userid' element={<NewRegistration4 />} /> */}
 
 
             </Route>

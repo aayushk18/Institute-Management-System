@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAdminStore } from "../../utils/useAuthStore";
 import { Loader } from "lucide-react";
 
@@ -24,13 +24,15 @@ const studentData = Array.from({ length: 50 }, (_, i) => ({
 }));
 
 const AdminNewRegistration = () => {
+
+    const navigate = useNavigate()
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [entriesPerPage, setEntriesPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const { showallNewRegistrations } = useAdminStore()
+    const { showallNewRegistrations, updateRegistrations } = useAdminStore()
 
-    const [studentsData, setstudentsData] = useState([])
+    const [student, setstudent] = useState([])
     const [isLoading, setisLoading] = useState(false)
 
     useEffect(() => {
@@ -42,7 +44,7 @@ const AdminNewRegistration = () => {
             if (!stu || stu.length === 0) {
 
             } else {
-                setstudentsData(stu);
+                setstudent(stu);
 
                 console.log(stu);
             }
@@ -61,7 +63,7 @@ const AdminNewRegistration = () => {
         );
     };
 
-    const filteredData = studentsData.filter((student) => {
+    const filteredData = student.filter((student) => {
         const matchedSearch = `${student.firstName}${student.midName}${student.lastName || ''}${student.fatherFirstName}${student.fatherMidName}${student.fatherLastName || ''}${student.StudentClass}${student.email}${student.phone}`.toLowerCase().includes(searchTerm.toLowerCase());
         return matchedSearch;
         // student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -220,7 +222,7 @@ const AdminNewRegistration = () => {
                     </div>
                     <table className="min-w-full text-sm text-left">
                         <thead className="bg-gray-500 text-white">
-                            <tr>
+                            <tr>2
                                 <th className="px-4 py-2">Name</th>
                                 <th className="px-4 py-2">Father Name</th>
                                 <th className="px-4 py-2">Class</th>
@@ -228,6 +230,8 @@ const AdminNewRegistration = () => {
                                 <th className="px-4 py-2">Phone no</th>
                                 {/* <th className="px-4 py-2">Registration Status</th> */}
                                 <th className="px-4 py-2">Action</th>
+                                <th className="px-4 py-2"></th>
+
                             </tr>
                         </thead>
 
@@ -251,8 +255,21 @@ const AdminNewRegistration = () => {
                                     {/* <td className="px-4 py-2">{student.class}</td> */}
                                     {/* <td className="px-4 py-2">{student.status}</td> */}
                                     <td className="px-4 py-2">
-                                        <button className="bg-gray-500 text-white px-3 py-1 rounded shadow text-sm hover:bg-gray-600">
+                                        <button className="bg-gray-500 text-white px-3 py-1 rounded shadow text-sm hover:bg-gray-600"
+                                            onClick={() => {
+                                                navigate(`/admin/admissions/registration-form/page-1/${student.firstName}-${student.StudentClass}-${student.phone}`, { state: { pass: student } })
+                                            }}
+                                        >
                                             Edit Profile
+                                        </button>
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        <button className="bg-gray-500 text-white px-3 py-1 rounded shadow text-sm hover:bg-gray-600"
+                                            onClick={() => {
+                                                navigate(`/admin/admissions/registration-form/details/${student.firstName}-${student.StudentClass}-${student.phone}`, { state: { pass: student } })
+                                            }}
+                                        >
+                                            View
                                         </button>
                                     </td>
                                 </tr>

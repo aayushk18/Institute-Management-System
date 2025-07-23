@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 const newregistrationSchema = new mongoose.Schema({
 
+
     StudentClass: { type: String },
+    studentpic: { type: String },
     firstName: { type: String },
     midName: { type: String },
     lastName: { type: String },
     gender: { type: String },
-    dob: { type: Date },
+    dob: { type: String },
     nationality: { type: String },
     category: { type: String },
     subCategory: { type: String },
@@ -18,7 +20,10 @@ const newregistrationSchema = new mongoose.Schema({
     phone: { type: String },
     altphone: { type: String },
     aadhar: { type: String },
+    bloodGroup: { type: String },
 
+
+    fatherPic: { type: String },
     fatherFirstName: { type: String },
     fatherMidName: { type: String },
     fatherLastName: { type: String },
@@ -32,6 +37,7 @@ const newregistrationSchema = new mongoose.Schema({
     fatherGraduationYear: { type: String },
     fatherGraduationCertificate: { type: String },
 
+    motherPic: { type: String },
     motherFirstName: { type: String },
     motherMidName: { type: String },
     motherLastName: { type: String },
@@ -45,6 +51,7 @@ const newregistrationSchema = new mongoose.Schema({
     motherGraduationYear: { type: String },
     motherGraduationCertificate: { type: String },
 
+    guardianPic: { type: String },
     guardianFirstName: { type: String },
     guardianMidName: { type: String },
     guardianLastName: { type: String },
@@ -59,9 +66,22 @@ const newregistrationSchema = new mongoose.Schema({
     guardianGraduationYear: { type: String },
     guardianGraduationCertificate: { type: String },
 
-    currentAddress: { type: String },
-    permanentAddress: { type: String },
-    hometown: { type: String },
+    currentHouseNo: { type: String },
+    currentLocality: { type: String },
+    currentDistrict: { type: String },
+    currentCity: { type: String },
+    currentState: { type: String },
+    currentPinCode: { type: String },
+    currentCountry: { type: String },
+
+    permanentHouseNo: { type: String },
+    permanentLocality: { type: String },
+    permanentDistrict: { type: String },
+    permanentCity: { type: String },
+    permanentState: { type: String },
+    permanentPinCode: { type: String },
+    permanentCountry: { type: String },
+
 
     previousSchoolLastClass: { type: String },
     previousSchoolName: { type: String },

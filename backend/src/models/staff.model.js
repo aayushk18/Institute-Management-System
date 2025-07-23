@@ -2,46 +2,68 @@ import mongoose from "mongoose";
 
 const staffSchema = new mongoose.Schema({
 
-    firstName: {
-        type: String,
-        required: true,
-
-
-    },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    dob: {
-        type: Date
-    },
+    // 1. Personal Details
+    firstName: { type: String, },
+    midName: { type: String, },
+    lastName: { type: String, },
     gender: { type: String },
-    email: { type: String },
-    loginID: {
-        type: String,
-        required: true,
-        lowercase: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
+    dateOfBirth: { type: Date, },
+    nationality: { type: String },
+    maritalStatus: { type: String },
+    bloodGroup: { type: String },
+    photo: { type: String },
+    signature: { type: String },
+
+    // 2. Contact Information
+    mobile: { type: String, required: true },
+    alternatePhone: { type: String },
+    email: { type: String, required: true, unique: true },
+    presentAddress: { type: String },
+    permanentAddress: { type: String },
+
+    // 3. Employment Details
+    staffType: { type: String, },
+    department: { type: String },
+    designation: { type: String },
+    dateOfJoining: { type: Date },
+    employeeId: { type: String, unique: true },
+    employmentType: { type: String, enum: ['Permanent', 'Contract', 'Outsourced'] },
+    reportingAuthority: { type: String },
+    salaryDetails: {
+        basic: { type: Number },
+        hra: { type: Number },
+        allowances: { type: Number }
     },
 
-    classes: [{
-
-        StudentClass: { type: String },
-        section: { type: String },
-        subject: { type: String }
+    // 4. Professional Background
+    workHistory: [{
+        organization: String,
+        position: String,
+        duration: String,
     }],
+    skills: [String],
 
-    userType: {
-        type: String,
-        default: 'teacher'
-    }
+    // 5. Login & System Access (if needed)
+    username: { type: String, unique: true },
+    password: { type: String }, // hashed
+    role: { type: String, enum: ['Staff', 'Admin'], default: 'Staff' },
+    accessPermissions: [String],
 
+    // 6. Documents Upload
+    documents: {
+        resume: { type: String },
+        idProof: { type: String },
+        qualificationCertificates: [String],
+        experienceLetters: [String],
+        policeVerification: { type: String },
+    },
 
-
+    // // 7. Declaration
+    // declaration: {
+    //     agreed: { type: Boolean, default: false },
+    //     signedBy: { type: String },
+    //     signedDate: { type: Date, default: Date.now }
+    // }
 })
 
 export const Staff = mongoose.model("Staff", staffSchema)

@@ -86,24 +86,24 @@ const StudentAdminComponent = () => {
 
                 </div>
 
-                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-xl rounded-lg shadow-md  p-2 text-center content-center'>
+                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-lg font-semibold rounded-lg shadow-md  p-2 text-center content-center'>
                     <NavLink to='students'>
                         Student
                     </NavLink>
                 </div>
-                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-xl rounded-lg shadow-md  p-2 text-center content-center'>
+                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-lg font-semibold rounded-lg shadow-md  p-2 text-center content-center'>
                     <button>
                         Fees
                     </button>
                 </div>
 
 
-                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-xl rounded-lg shadow-md  p-2 text-center content-center'>
+                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-lg font-semibold rounded-lg shadow-md  p-2 text-center content-center'>
                     <button>
                         Timetable
                     </button>
                 </div>
-                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-xl rounded-lg shadow-md  p-2 text-center content-center'>
+                <div className='bg-white m-5 hover:bg-gray-500 hover:text-white transition duration-300 text-lg font-semibold rounded-lg shadow-md  p-2 text-center content-center'>
                     <button>
                         Other Details
                     </button>
@@ -114,7 +114,7 @@ const StudentAdminComponent = () => {
             <div className='grid grid-cols-2 gap-5 m-5'>
                 <div>
                     <div className=" p-6 bg-white shadow-md rounded-md">
-                        <h2 className="text-md font-semibold text-center mb-4">Events and Calender</h2>
+                        <h2 className="text-lg font-semibold  mb-4">Events and Calender</h2>
 
                         <div className="mb-2 flex flex-row justify-between">
                             <select
@@ -141,7 +141,7 @@ const StudentAdminComponent = () => {
                 </div>
                 <div className='w-full'>
                     <div className=" p-6 bg-white rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold mb-4">📢 Notices & Circulars</h2>
+                        <h2 className="text-lg font-semibold mb-4">📢 Notices & Circulars</h2>
                         <ul className="space-y-3">
                             {visibleNotices.map((notice) => (
                                 <li

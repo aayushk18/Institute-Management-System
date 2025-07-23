@@ -18,7 +18,7 @@ const Navbar = () => {
     const navItems = [
         { label: "Home", to: "/admin/home", icon: Home },
         { label: "Students", to: "/admin/student", icon: GraduationCap },
-        { label: "Faculties", to: "/admin/staff", icon: Users },
+        { label: "Faculties", to: "/admin/faculties", icon: Users },
         { label: "Academics", to: "/admin/academics", icon: BookOpen },
         { label: "Admissions", to: "/admin/admissions", icon: FilePlus },
         { label: "Fees & Payments", to: "/admin/payments", icon: CreditCard },

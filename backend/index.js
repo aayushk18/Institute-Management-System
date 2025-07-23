@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser'
 import { checkAuth } from './src/controllers/auth.controller.js'
 import cors from 'cors';
 import bodyParser from 'body-parser'
+import path from 'path';
+
 
 
 
@@ -28,6 +30,11 @@ app.use(cors({
 
 
 app.use('/api/user', router)
+
+
+app.use('/documents', express.static(path.join(path.resolve(), 'files', 'documents')));
+app.use('/pics', express.static(path.join(path.resolve(), 'files', 'pics')));
+
 
 
 // app.use('/api/auth', login, router)

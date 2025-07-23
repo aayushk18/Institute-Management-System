@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.clean-print {
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}

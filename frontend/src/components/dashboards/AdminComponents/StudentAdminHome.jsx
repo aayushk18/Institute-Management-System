@@ -54,7 +54,10 @@ const StudentAdminHome = () => {
 
     return (
         <div className="w-full h-full p-5 text-white">
+
+
             <div className="flex flex-row justify-between gap-4 mb-4">
+
                 <div className="flex flex-row gap-4">
                     <select
                         className="p-4 rounded-md bg-white  border-t-1 shadow-md border-gray-200 hover:bg-gray-50 border text-black"
@@ -168,6 +171,7 @@ const StudentAdminHome = () => {
                         <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">Next</button>
                     </div>
                 </div>
+
             </div>
 
 

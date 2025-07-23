@@ -5,19 +5,19 @@ const AcademicsAdminDashboard = () => {
     return (
 
 
-        <div className='w-full flex flex-col p-10' >
+        <div className='w-full flex flex-col  ' >
 
 
 
 
 
-            <div className='grid grid-cols-5 gap-5 m-5 w-full justify-between '>
+            <div className='flex flex-row gap-5 p-1 w-full bg-white border-b-2 border-gray-200 px-6 '>
 
-                <NavLink className='bg-green-500 text-white p-5 text-2xl rounded-2xl' to='classes'>Classes </NavLink>
-                <NavLink className='bg-orange-500 text-white p-5 text-2xl rounded-2xl' to='subjects'>Subjects </NavLink>
-                <NavLink className='bg-red-500 text-white p-5 text-2xl rounded-2xl' to='timetable'>Timetable </NavLink>
-                <NavLink className='bg-yellow-500 text-white p-5 text-2xl rounded-2xl' to='attendance'>Attendance </NavLink>
-                <NavLink className='bg-emerald-500  text-white p-5 text-2xl rounded-2xl' to='examination'>Examination </NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='classes'>Classes </NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='subjects'>Subjects </NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='timetable'>Timetable </NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='attendance'>Attendance </NavLink>
+                <NavLink className={({ isActive }) => ` p-1 px-2 font-semibold text-md rounded-sm ${isActive ? 'bg-gray-500 text-white' : 'text-gray-500 hover:bg-gray-100'} `} to='examination'>Examination </NavLink>
 
 
             </div>
