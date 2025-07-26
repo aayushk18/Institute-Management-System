@@ -9,6 +9,7 @@ import { StaffAttendance } from "../models/staffAttendance.model.js";
 import { Event } from "../models/event.model.js";
 import { StudentAttendance } from "../models/studentAttendance.model.js";
 import mongoose from "mongoose";
+import { ClassSyllabus } from "../models/classSyllabus.model.js";
 
 
 
@@ -1867,28 +1868,14 @@ export const testing = async (req, res) => {
 
     try {
 
-        const { studentid } = req.body;
-        const file = req.file;
-
-        console.log(req.file.filename, "yess file exist", req.body);
-
-
-        if (!file) {
-            return res.status(400).json({ error: 'No file uploaded' });
-        }
 
 
 
 
 
-        res.status(201).json({
-            message: 'File uploaded!',
-            fileInfo: {
-                name: file.originalname,
-                type: file.mimetype,
-                savedAs: file.filename
-            }
-        });
+        await ClassSyllabus.insertMany(Syllabus);
+
+        console.log("Data inserted successfully");
 
         // const form = new FormData();
         // form.append('file', file.buffer, {
@@ -1902,10 +1889,10 @@ export const testing = async (req, res) => {
 
         // res.json(response.data);
         // res.status(201).json(ress);
-
+        res.status(200).json({ message: 'Submitted succesfully' });
 
     } catch (error) {
-        console.error('Error sending to Python:', error.message);
+        console.error('Error sending to testing:', error.message);
         res.status(500).json({ error: 'Something went wrong' });
     }
 

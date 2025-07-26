@@ -148,7 +148,7 @@ try {
 
 
 
-    router.put('/admin/testing', pic_upload.single('file'), testing)
+    // router.put('/admin/testing', pic_upload.single('file'), testing)
 
     // admin faculty
 
@@ -176,7 +176,7 @@ try {
 
 
     router.post('/admin/students/attendance/get-class-data', getClassAttendanceData)
-    router.post()
+    router.post('/admin/testing', testing)
 
 
 

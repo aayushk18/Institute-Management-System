@@ -145,6 +145,9 @@ function App() {
             <Route path='examination' element={<ExaminationAdmin />} >
               <Route path='datesheet' element={<ExaminationDatesheet />} />
             </Route>
+            <Route path='result' element={<AttendanceAdmin />}>
+            </Route>
+
           </Route>
           <Route path='notice' element={<NoticeAdminComponent />} />
           <Route path='library' element={<LibraryAdminComponent />} />
