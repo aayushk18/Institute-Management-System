@@ -11,6 +11,12 @@ import { Staff } from "../models/staff.model.js";
 
 export const login = async (req, res) => {
 
+
+    if (!req.body) {
+
+        return res.status(200).json({ message: "Sorry: Not found" });
+    }
+
     const { loginID, password } = req.body;
 
     console.log(loginID, password);

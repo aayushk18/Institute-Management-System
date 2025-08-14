@@ -176,7 +176,7 @@ const AddNewFaculty2 = () => {
 
                 <div className="w-full bg-gray-100 flex flex-col    p-4 sm:p-6 md:p-10">
                     <h2 className="  text-lg sm:text-3xl md:text-2xl font-bold  text-gray-800 mb-8 content-center text-center">
-                        Staff Details
+                        General Staff Details
                     </h2>
 
                     <form

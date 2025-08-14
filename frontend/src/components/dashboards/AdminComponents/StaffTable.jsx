@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 const staffData = Array.from({ length: 53 }, (_, i) => ({
     id: i + 1,
     name: `Staff ${i + 1}`,
@@ -57,9 +58,9 @@ const StaffTable = () => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <NavLink to='/admin/faculties/new-staff' className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                         Add Staff
-                    </button>
+                    </NavLink>
                 </div>
             </div>
 
@@ -88,30 +89,30 @@ const StaffTable = () => {
 
             {/* Table */}
             <div className="overflow-x-auto">
-                <table className="min-w-full border text-sm">
-                    <thead className="bg-gray-100">
+                <table className="min-w-full  text-sm">
+                    <thead className="bg-gray-500 text-white">
                         <tr>
-                            <th className="border px-4 py-2">ID</th>
-                            <th className="border px-4 py-2">Name</th>
-                            <th className="border px-4 py-2">Phone no</th>
-                            <th className="border px-4 py-2">Department</th>
-                            <th className="border px-4 py-2">Role</th>
-                            <th className="border px-4 py-2">Actions</th>
+                            <th className="border-b px-4 py-2">ID</th>
+                            <th className="border-b px-4 py-2">Name</th>
+                            <th className="border-b px-4 py-2">Phone no</th>
+                            <th className="border-b px-4 py-2">Department</th>
+                            <th className="border-b px-4 py-2">Role</th>
+                            <th className="border-b px-4 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentData.map((staff) => (
                             <tr key={staff.id} className="text-center">
-                                <td className="border px-4 py-2">{staff.id}</td>
-                                <td className="border px-4 py-2">{staff.name}</td>
-                                <td className="border px-4 py-2">{staff.phone}</td>
-                                <td className="border px-4 py-2">{staff.department}</td>
-                                <td className="border px-4 py-2">{staff.role}</td>
-                                <td className="border px-4 py-2 space-x-2">
-                                    <button className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">
+                                <td className="border-b  px-4 py-2">{staff.id}</td>
+                                <td className="border-b  px-4 py-2">{staff.name}</td>
+                                <td className="border-b  px-4 py-2">{staff.phone}</td>
+                                <td className="border-b  px-4 py-2">{staff.department}</td>
+                                <td className="border-b  px-4 py-2">{staff.role}</td>
+                                <td className="border-b  px-4 py-2 space-x-2">
+                                    <button className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
                                         View
                                     </button>
-                                    <button className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">
+                                    <button className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
                                         Edit
                                     </button>
                                 </td>

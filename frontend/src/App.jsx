@@ -122,8 +122,8 @@ function App() {
           <Route path='faculties' element={<StaffAdminComponent />}>
             <Route path='all-staff' element={<StaffTable />} />
             <Route path='new-staff' element={<AddNewFaculty />} />
-            <Route path='edit-staff-1' element={<AddNewFaculty1 />} />
-            <Route path='edit-staff-2' element={<AddNewFaculty2 />} />
+            <Route path='academic-staff' element={<AddNewFaculty1 />} />
+            <Route path='general-staff' element={<AddNewFaculty2 />} />
             <Route path='edit-staff-3' element={<AddNewFaculty3 />} />
             <Route path='feedback' element={<FacultyFeedback />} />
             <Route path='attendance' element={<FacultyAttendancePage />} />
@@ -142,12 +142,13 @@ function App() {
             <Route path='subjects' element={<SubjectAdmin />} />
             <Route path='timetable' element={<TimetableAdmin />} />
             <Route path='attendance' element={<AttendanceAdmin />} />
-            <Route path='examination' element={<ExaminationAdmin />} >
-              <Route path='datesheet' element={<ExaminationDatesheet />} />
-            </Route>
+
             <Route path='result' element={<AttendanceAdmin />}>
             </Route>
 
+          </Route>
+          <Route path='examination' element={<ExaminationAdmin />} >
+            <Route path='datesheet' element={<ExaminationDatesheet />} />
           </Route>
           <Route path='notice' element={<NoticeAdminComponent />} />
           <Route path='library' element={<LibraryAdminComponent />} />

@@ -13,16 +13,71 @@ const holidays = [
 ];
 
 const classesData = {
-  "Class 9": {
+  "1": {
     // Added Class 9 to ensure it appears in headers
     General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
   },
-  "Class 10": {
+  "2": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "3": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "4": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "5": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "6": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "7": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "8": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "9": {
+    // Added Class 9 to ensure it appears in headers
+    General: ["Mathematics", "Science", "Social Science", "English", "Hindi"],
+  },
+  "10": {
     Science: ["Physics", "Chemistry", "Biology", "Mathematics"],
     Commerce: ["Accountancy", "Business Studies", "Economics", "Mathematics"],
     Arts: ["History", "Political Science", "Geography", "English Literature"],
   },
-  "Class 12": {
+  "11": {
+    Science: [
+      "Physics",
+      "Chemistry",
+      "Biology",
+      "Mathematics",
+      "Computer Science",
+    ],
+    Commerce: [
+      "Accountancy",
+      "Business Studies",
+      "Economics",
+      "Applied Mathematics",
+      "Informatics Practices",
+    ],
+    Arts: [
+      "History",
+      "Political Science",
+      "Sociology",
+      "Psychology",
+      "Fine Arts",
+    ],
+  },
+  "12": {
     Science: [
       "Physics",
       "Chemistry",

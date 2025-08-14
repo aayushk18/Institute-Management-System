@@ -11,9 +11,6 @@ const AddNewFaculty = () => {
     const navigate = useNavigate()
 
 
-
-
-
     const [form, setForm] = useState({
         StudentClass: '',
         firstName: '',
@@ -176,7 +173,11 @@ const AddNewFaculty = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        navigate(`/admin/faculties/edit-staff-1`, { state: { pass: form } })
+        if (selectedBranch == 'Academic Staff') {
+            navigate(`/admin/faculties/academic-staff`, { state: { pass: form } })
+        } else if (selectedBranch == '' || !selectedBranch) {
+            alert("please select a branch")
+        } else navigate(`/admin/faculties/general-staff`, { state: { pass: form } })
 
 
         const success = validateForm()

@@ -1,4 +1,3 @@
-
 import express from "express"
 import { checkAuth, login, logout } from "../controllers/auth.controller.js";
 import { AddNewStaff, AddStudentAccount, getAllStudents, resetrollno, setTimetableForClass, testing, updateAdmin, addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic, addNewStaff, ActivateStudent, InactivateStudent, setStudentsForClass, getStudentsForClass, getStudentsFromClass, getClassData, getClassAttendanceData } from "../controllers/admin.controller.js";
@@ -26,8 +25,6 @@ const doc_storage = multer.diskStorage({
     }
 });
 
-
-
 const pic_storage = multer.diskStorage({
 
 
@@ -40,8 +37,6 @@ const pic_storage = multer.diskStorage({
     }
 });
 
-
-
 const faculty_pic_storage = multer.diskStorage({
 
     destination: (req, file, cb) => {
@@ -52,8 +47,6 @@ const faculty_pic_storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + 'picture' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
-
-
 
 const faculty_doc_storage = multer.diskStorage({
 
@@ -67,8 +60,6 @@ const faculty_doc_storage = multer.diskStorage({
     }
 });
 
-
-
 const teacher_pic_storage = multer.diskStorage({
 
     destination: (req, file, cb) => {
@@ -79,8 +70,6 @@ const teacher_pic_storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + 'picture' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
-
-
 
 const teacher_doc_storage = multer.diskStorage({
 
@@ -94,17 +83,11 @@ const teacher_doc_storage = multer.diskStorage({
     }
 });
 
-
-
 const pic_upload = multer({ storage: pic_storage });
 const doc_upload = multer({ storage: doc_storage });
 
-
-
 const faculty_pic_upload = multer({ storage: faculty_pic_storage });
 const faculty_doc_upload = multer({ storage: faculty_doc_storage });
-
-
 
 const teacher_pic_upload = multer({ storage: teacher_pic_storage });
 const teacher_doc_upload = multer({ storage: teacher_doc_storage });
@@ -113,12 +96,9 @@ const teacher_doc_upload = multer({ storage: teacher_doc_storage });
 
 try {
 
-
-
     router.post('/login', login)
     router.get("/check", protectRoute, checkAuth)
     router.post('/logout', logout)
-
 
 
     // admin
@@ -130,6 +110,7 @@ try {
     router.post('/admin/newstaff', AddNewStaff)//checked
     router.patch('/admin/updateprofile', updateAdmin)//checked
 
+
     //admin admission
 
     router.post('/admin/admission/newregistration', addNewRegistration)
@@ -138,7 +119,6 @@ try {
     router.post('/admin/admission/updateregistration1', updateStudentRegistrationDetails)
     router.post('/admin/admission/updateregistration2', updateParentRegistrationDetails)
     router.post('/admin/admission/updateregistration3', updateOthertRegistrationDetails)
-
 
 
     router.put('/admin/admission/newregistration/student-pic', pic_upload.single('file'), UploadStudentpic)
@@ -154,6 +134,7 @@ try {
 
     router.post('/admin/faculty/newregistration', addNewStaff)
 
+
     // teacher
     router.post('/update-marks', uploadTestMarks)//checked
     router.post('/update-result', uploadResult)
@@ -162,10 +143,13 @@ try {
     router.get('/timetable', findTimetableforTeacher)
     router.get('/students', showStudents)// checked
 
+
     //student
     router.post('/uploadhomework', uploadHomework)
     router.get('/homeworks', showHomeworks)//checkd
     router.get('/timetable', findTimetableforStudent)
+
+
     router.post('/admin/students/active', ActivateStudent)
     router.post('/admin/students/inactive', InactivateStudent)
     router.post('/admin/students/classes/update-class', setStudentsForClass)
@@ -174,12 +158,11 @@ try {
     router.post('/admin/students/classes/get-class-data', getClassData)
 
 
-
     router.post('/admin/students/attendance/get-class-data', getClassAttendanceData)
+
+
+
     router.post('/admin/testing', testing)
-
-
-
 
 
 

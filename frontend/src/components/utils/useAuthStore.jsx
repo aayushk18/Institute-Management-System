@@ -6,9 +6,7 @@ import { ActivateStudent } from '../../../../backend/src/controllers/admin.contr
 
 
 
-const UserAdmin = {
-    userType: 'admin',
-}
+const UserAdmin = { userType: 'admin' }
 
 
 
@@ -22,8 +20,6 @@ export const useAuthStore = create((set) => ({
     isSigningUp: false,
     isLoggingIn: false,
     isUpdatingProfile: false,
-
-
 
     isCheckAuth: true,
 
@@ -106,8 +102,10 @@ export const useAuthStore = create((set) => ({
 
 export const useAdminStore = create((set) => ({
 
+
     isSending: false,
     isLoading: false,
+
 
     ActivateStudent: async (data) => {
         try {
@@ -134,9 +132,6 @@ export const useAdminStore = create((set) => ({
         }
     },
 
-
-
-
     setStudentpic: async (data) => {
 
         try {
@@ -150,6 +145,7 @@ export const useAdminStore = create((set) => ({
 
 
     },
+
     setFatherPic: async (data) => {
 
         try {
@@ -163,6 +159,7 @@ export const useAdminStore = create((set) => ({
 
 
     },
+
     setMotherPic: async (data) => {
 
         try {
@@ -176,6 +173,7 @@ export const useAdminStore = create((set) => ({
 
 
     },
+
     setGuardianPic: async (data) => {
 
         try {
@@ -250,6 +248,7 @@ export const useAdminStore = create((set) => ({
         }
 
     },
+
     getClassData: async (StudentClass, section) => {
         const data = {
             StudentClass,
@@ -274,6 +273,7 @@ export const useAdminStore = create((set) => ({
             toast.error(error.response.data.message)
         }
     },
+
     getFullClassData: async (StudentClass, section) => {
         const data = {
             StudentClass,
@@ -339,6 +339,7 @@ export const useAdminStore = create((set) => ({
 
 
     },
+
     UpdateStudent: async (data) => {
 
         try {
@@ -414,7 +415,6 @@ export const useAdminStore = create((set) => ({
         }
     },
 
-
     setRegistrationForm: async (data) => {
 
         try {
@@ -445,6 +445,7 @@ export const useAdminStore = create((set) => ({
 
 
     },
+
     updateRegistrationForm2: async (data) => {
 
         try {
@@ -459,6 +460,7 @@ export const useAdminStore = create((set) => ({
 
 
     },
+
     updateRegistrationForm3: async (data) => {
 
         try {
@@ -472,5 +474,7 @@ export const useAdminStore = create((set) => ({
         }
 
 
-    },
+    }
+
+
 }))
