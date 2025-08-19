@@ -1,6 +1,6 @@
 import express from "express"
 import { checkAuth, login, logout } from "../controllers/auth.controller.js";
-import { AddNewStaff, AddStudentAccount, getAllStudents, resetrollno, setTimetableForClass, testing, updateAdmin, addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic, addNewStaff, ActivateStudent, InactivateStudent, setStudentsForClass, getStudentsForClass, getStudentsFromClass, getClassData, getClassAttendanceData } from "../controllers/admin.controller.js";
+import { AddNewStaff, AddStudentAccount, getAllStudents, resetrollno, setTimetableForClass, testing, updateAdmin, addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic, addNewStaff, ActivateStudent, InactivateStudent, setStudentsForClass, getStudentsForClass, getStudentsFromClass, getClassData, getClassAttendanceData, showAllStaff, homeDashboardData, updateStaffAttendance, getGeneralStaffAttendance, getAcademicStaffAttendance } from "../controllers/admin.controller.js";
 import { AddHomework, findTimetableforTeacher, homeworkUpdateToTeacher, showStudents, uploadResult, uploadTestMarks } from "../controllers/staff.controller.js";
 import { findTimetableforStudent, showHomeworks, uploadHomework } from "../controllers/student.controller.js";
 import { protectRoute } from "../middlewares/auth.middleware.js";
@@ -101,6 +101,14 @@ try {
     router.post('/logout', logout)
 
 
+    //extra data
+
+
+    router.get('/admin/home', homeDashboardData)
+
+
+
+
     // admin
 
     router.post('/admin/resetrollno', resetrollno)
@@ -133,6 +141,10 @@ try {
     // admin faculty
 
     router.post('/admin/faculty/newregistration', addNewStaff)
+    router.post('/admin/faculty/all-staff', showAllStaff)
+    router.post('/admin/faculty/update-attendance', updateStaffAttendance)
+    router.post('/admin/faculty/get-general-staff-attendance', getGeneralStaffAttendance)
+
 
 
     // teacher

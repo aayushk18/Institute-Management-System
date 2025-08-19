@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { useAdminStore } from '../../utils/useAuthStore';
-import { Loader } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAdminStore } from '../../../utils/useAuthStore';
 
 
-const StaffTable = () => {
+const FacultyAttendanceTable = () => {
 
-
+    const navigate = useNavigate()
     const data = Array.from({ length: 53 }, (_, i) => ({
 
     }));
@@ -91,9 +90,7 @@ const StaffTable = () => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    <NavLink to='/admin/faculties/new-staff' className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                        Add Staff
-                    </NavLink>
+
                 </div>
             </div>
 
@@ -131,6 +128,7 @@ const StaffTable = () => {
                     <table className="min-w-full  text-sm">
                         <thead className="bg-gray-500 text-white">
                             <tr>
+
                                 <th className="border-b px-4 py-2">Name</th>
                                 <th className="border-b px-4 py-2">Phone no</th>
                                 <th className="border-b px-4 py-2">Department</th>
@@ -141,18 +139,18 @@ const StaffTable = () => {
                         <tbody>
                             {currentData.map((staff) => (
                                 <tr key={staff.id} className="text-center">
-
                                     <td className="border-b  px-4 py-2">{`${staff.firstName} ${staff?.midName} ${staff?.lastName}`}</td>
                                     <td className="border-b  px-4 py-2">{staff.phone}</td>
                                     <td className="border-b  px-4 py-2">{staff.staffType}</td>
                                     <td className="border-b  px-4 py-2">{staff.designation}</td>
                                     <td className="border-b  px-4 py-2 space-x-2">
-                                        <button className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
-                                            View
+                                        <button
+                                            onClick={() => { navigate(`/admin/faculties/attendance/${staff.firstName}-${staff.phone}`, { state: { pass: staff } }) }
+                                            }
+                                            className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
+                                            View Attendance
                                         </button>
-                                        <button className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
-                                            Edit
-                                        </button>
+
                                     </td>
                                 </tr>
                             ))}
@@ -203,4 +201,4 @@ const StaffTable = () => {
     );
 };
 
-export default StaffTable;
+export default FacultyAttendanceTable;

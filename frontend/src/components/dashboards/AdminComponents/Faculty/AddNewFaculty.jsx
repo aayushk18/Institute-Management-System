@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAdminStore } from '../../../utils/useAuthStore';
 
 
 
@@ -10,23 +11,22 @@ const AddNewFaculty = () => {
 
     const navigate = useNavigate()
 
+    const { newStaffRegistration } = useAdminStore();
+
 
     const [form, setForm] = useState({
-        StudentClass: '',
+
         firstName: '',
         midName: '',
         lastName: '',
         gender: '',
         dob: '',
-        nationality: '',
-        category: '',
-        subCategory: '',
-        quota: '',
-        motherTongue: '',
-        religion: '',
+        branch: '',
+        roles: '',
         email: '',
         phone: '',
         altphone: ''
+
     });
     const personalDetails = [
         { label: 'First Name', key: 'firstName', type: 'text' },
@@ -45,24 +45,27 @@ const AddNewFaculty = () => {
         {
             branch: "Academic Staff",
             roles: [
-                { name: "Primary School Teacher", sub_roles: ["English", "Hindi", "Maths", "EVS", "GK"] },
-                { name: "Secondary School Teacher", sub_roles: ["English", "Hindi", "Mathematics", "Science", "SST"] },
-                { name: "Intermediate Art/ Humanities Teacher", sub_roles: ["English", "Mathematics", "History", "Geography", "Political Science", "Sociology", "Psychology", "Economics", "Philosophy"] },
-                { name: "Intermediate Commerce Teacher", sub_roles: ["English", "Accountancy", "Business Studies", "Economics", "Mathematics"] },
-                { name: "Intermediate Science Teacher", sub_roles: ["English", "Mathematics", "Physics", "Chemistry", "Biology", "IT (C++)", "IT (Python)", "IT (Java)"] },
+
+                { name: "Primary School Teacher" },
+                { name: "Secondary School Teacher" },
+                { name: "Intermediate Art/ Humanities Teacher" },
+                { name: "Intermediate Commerce Teacher" },
+                { name: "Intermediate Science Teacher" },
                 { name: "Special Education Teacher" },
                 { name: "Physical Education (PE) Teacher" },
-                { name: "Art/Music/Dance Teacher", sub_roles: ["Art", "Music", "Dance"] },
-                { name: "Language Teacher", sub_roles: ["French", "Spanish", "German"] },
+                { name: "Art/Music/Dance Teacher" },
+                { name: "Language Teacher" },
                 { name: "Computer Science/ICT Teacher" },
                 { name: "Substitute Teacher" },
                 { name: "Teaching Assistant / Paraprofessional" }
+
             ]
         },
 
         {
             branch: "Administrative Staff",
             roles: [
+
                 { name: "Principal / Headmaster" },
                 { name: "Vice Principal / Assistant Principal" },
                 { name: "School Administrator" },
@@ -73,11 +76,13 @@ const AddNewFaculty = () => {
                 { name: "Office Assistant / Clerk" },
                 { name: "HR Officer" },
                 { name: "School Counselor / Guidance Counselor" }
+
             ]
         },
         {
             branch: "Support & Maintenance Staff",
             roles: [
+
                 { name: "Librarian" },
                 { name: "IT Technician / Network Administrator" },
                 { name: "Janitor / Custodian" },
@@ -87,34 +92,41 @@ const AddNewFaculty = () => {
                 { name: "Maintenance Worker" },
                 { name: "Lab Technician" },
                 { name: "Groundskeeper" }
+
             ]
         },
         {
             branch: "Food Service Staff",
             roles: [
+
                 { name: "Cafeteria Manager" },
                 { name: "Cook / Chef" },
                 { name: "Kitchen Helper / Food Server" },
                 { name: "Nutritionist" }
+
             ]
         },
         {
             branch: "Student Support Services",
             roles: [
+
                 { name: "School Psychologist" },
                 { name: "Social Worker" },
                 { name: "Speech Therapist" },
                 { name: "Occupational Therapist" },
                 { name: "Nurse / Health Aide" },
                 { name: "Career Counselor" }
+
             ]
         },
         {
             branch: "Finance & Procurement",
             roles: [
+
                 { name: "Accountant / Bursar" },
                 { name: "Procurement Officer" },
                 { name: "Fee Collection Clerk" }
+
             ]
         }
     ];
@@ -154,43 +166,50 @@ const AddNewFaculty = () => {
 
     const validateForm = (e) => {
 
-        // console.log(form.firstName.trim());
-
         if (!form.firstName.trim()) return toast.error('First Name is required');
-        if (!form.gender.trim()) return toast.error('First Name is required');
-        if (!form.dob.trim()) return toast.error('First Name is required');
-        if (!form.nationality.trim()) return toast.error('First Name is required');
-        if (!form.category.trim()) return toast.error('First Name is required');
-        if (!form.religion.trim()) return toast.error('First Name is required');
-        if (!form.motherTongue.trim()) return toast.error('First Name is required');
-        if (!form.email.trim()) return toast.error('First Name is required');
-        if (!form.phone.trim()) return toast.error('First Name is required');
-        if (!form.altphone.trim()) return toast.error('First Name is required');
+        if (!form.dob.trim()) return toast.error('Date of birth is required');
+        if (!form.gender.trim()) return toast.error('Gender is required');
+        if (!form.email.trim()) return toast.error('Email is required');
+        if (!form.phone.trim()) return toast.error('Phone no is required');
+        if (!form.branch.trim()) return toast.error('Branch is required');
+        if (!form.roles.trim()) return toast.error('Role is required');
 
-        return true
+        return true;
+
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (selectedBranch == 'Academic Staff') {
-            navigate(`/admin/faculties/academic-staff`, { state: { pass: form } })
-        } else if (selectedBranch == '' || !selectedBranch) {
-            alert("please select a branch")
-        } else navigate(`/admin/faculties/general-staff`, { state: { pass: form } })
+        console.log(form);
 
 
         const success = validateForm()
-        if (success == true) {
-            // const set = await setRegistrationForm(form)
 
+        if (selectedBranch == 'Academic Staff') {
+            if (success == true) {
 
-            // if (set == true) {
-            //     updateRegistrations(form)
-            //     navigate(`/admin/admissions/registration-form/page-1/${form.firstName}-${form.StudentClass}-${form.phone}`, { state: { pass: form } })
+                const st = await newStaffRegistration(form);
+                if (st === true) {
+                    navigate(`/admin/faculties/academic-staff`, { state: { pass: form } })
+                }
+            }
+        } else if (selectedBranch == '' || !selectedBranch) {
 
-            // }
+            alert("please select a branch")
+        } else if (success == true) {
+
+            const st = await newStaffRegistration(form)
+            if (st === true) {
+                navigate(`/admin/faculties/general-staff`, { state: { pass: form } })
+            }
+
         }
+
+
+
+
+
 
 
     }
@@ -297,7 +316,10 @@ const AddNewFaculty = () => {
                                 <label className="block mb-2">Branch</label>
                                 <select
                                     value={selectedBranch}
-                                    onChange={handleBranchChange}
+                                    onChange={(e) => {
+                                        handleBranchChange(e),
+                                            setForm({ ...form, branch: e.target.value })
+                                    }}
                                     className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
                                 >
                                     <option value="">Select a branch</option>
@@ -312,7 +334,10 @@ const AddNewFaculty = () => {
                                     <label className="block mb-2">Role</label>
                                     <select
                                         value={selectedRole}
-                                        onChange={handleRoleChange}
+                                        onChange={(e) => {
+                                            handleRoleChange(e),
+                                                setForm({ ...form, roles: e.target.value })
+                                        }}
                                         className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
                                     >
                                         <option value="">Select a role</option>
@@ -324,126 +349,7 @@ const AddNewFaculty = () => {
                             )}
 
 
-                            {selectedRole && currentRole?.sub_roles && (
-                                <div>
-                                    <label className="block mb-2">Sub Role</label>
-                                    <select
-                                        value={selectedSubRole}
-                                        onChange={(e) => setSelectedSubRole(e.target.value)}
-                                        className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
-                                    >
-                                        <option value="">Select a sub-role</option>
-                                        {currentRole.sub_roles.map((sub, i) => (
-                                            <option key={i} value={sub}>{sub}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            )}
 
-
-                            {/* <div className="col-span-2 row-span-2 border p-4 rounded-md shadow-md overflow-y-auto max-h-60">
-                                <h3 className="font-semibold mb-2">Subjects</h3>
-                                <div className="flex gap-2 mb-2">
-                                    <input
-                                        type="text"
-                                        placeholder="Add Subject"
-                                        value={newSubject}
-                                        onChange={(e) => setNewSubject(e.target.value)}
-                                        className="input flex-1"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            if (newSubject.trim()) {
-                                                setSubjects([...subjects, newSubject.trim()]);
-                                                setNewSubject('');
-                                            }
-                                        }}
-                                        className="bg-blue-600 text-white px-4 py-2 rounded"
-                                    >
-                                        Add
-                                    </button>
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {subjects.map((subject, index) => (
-                                        <div key={index} className="bg-gray-100 px-3 py-1 rounded shadow text-sm flex items-center justify-between">
-                                            <span>{subject}</span>
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    setSubjects(subjects.filter((_, i) => i !== index))
-                                                }
-                                                className="ml-2 text-red-500 text-xs font-bold"
-                                            >
-                                                ×
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div> */}
-
-
-
-
-
-                            {/* {personalDetails.map(({ label, key, type, colSpan = 1 }) => (
-                        <div key={key} className={`col-span-${colSpan}`}>
-                            <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">{label}</label>
-                            <input
-
-
-
-                                type={type}
-                                value={form[key] || ''}
-                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                                placeholder={`Enter ${label.toLowerCase()}`}
-                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
-
-                            />
-                        </div>
-
-
-                    ))} */}
-
-
-
-                            {/* 
-                    <div>
-                        <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">Class</label>
-                        <select
-                            value={selectedClass}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                setSelectedClass(value);
-                                setForm({ ...form, StudentClass: value, section: '' });
-                                setSelectedSection('');
-                            }}
-                            className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
-                        >
-                            <option value="">Select class</option>
-                            {classSections.map(({ class: cls }) => (
-                                <option key={cls} value={cls}>{cls}</option>
-                            ))}
-                        </select>
-                    </div> */}
-                            {/* {selectedClass && (
-                        <div>
-                            <label className="block text-gray-800 mb-2 text-sm sm:text-base font-medium">Section</label>
-                            <select
-                                value={selectedSection}
-                                onChange={(e) => {
-                                    setSelectedSection(e.target.value);
-                                    setForm({ ...form, section: e.target.value });
-                                }}
-                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-800 focus:outline-none transition duration-200"
-                            >
-                                <option value="">Select section</option>
-                                {classObj?.subclasses.map(({ section }) => (
-                                    <option key={section} value={section}>{section}</option>
-                                ))}
-                            </select>
-                        </div>
-                    )} */}
                         </div>
 
                         <div className=' w-full '>

@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 const AddNewFaculty1 = () => {
 
 
-
-
-    // formFields.js
     const student = []
 
     const personalDetails = [
         { label: "Full Name", key: "fullName", type: "text", colSpan: 1 },
+        { label: "Mid Name", key: "midName", type: "text", colSpan: 1 },
+        { label: "Last Name", key: "lastName", type: "text", colSpan: 1 },
         { label: "Gender", key: "gender", type: "select", options: [{ val: "Select" }, { val: "Male" }, { val: "Female" }, { val: "Other" }], colSpan: 1 },
         { label: "Date of Birth", key: "dob", type: "date", colSpan: 1 },
         { label: "Nationality", key: "nationality", type: "text", colSpan: 1 },

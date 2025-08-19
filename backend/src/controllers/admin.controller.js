@@ -10,32 +10,42 @@ import { Event } from "../models/event.model.js";
 import { StudentAttendance } from "../models/studentAttendance.model.js";
 import mongoose from "mongoose";
 import { ClassSyllabus } from "../models/classSyllabus.model.js";
+import { AcademicStaff } from "../models/academicStaff.model.js";
 
 
 
 
 
 
+export const homeDashboardData = async (req, res) => {
 
-// export const setNewStudent = async (req, res) => {
+    try {
+
+        const totalStudent = await Student.countDocuments();
+
+        const totalStaff = await Staff.countDocuments();
+
+        const totalTeachers = await AcademicStaff.countDocuments();
+
+        const maleCount = await Student.countDocuments({ gender: { $regex: /^male$/i } });
+        const femaleCount = await Student.countDocuments({ gender: { $regex: /^female$/i } });
+
+        res.status(200).json({
+            totalStudent,
+            totalStaff,
+            totalTeachers,
+            male: maleCount,
+            female: femaleCount
+        })
 
 
-//     const { firstName, lastName, studentpic, dob, gender, Class, section, fatherName, motherName, email, fatherphoneno, motherphoneno } = req.body;
 
 
-//     try {
-//         if (!firstName || !lastName || !studentpic || !dob || !gender || !Class || !section || !fatherName || !motherName || !email || !fatherphoneno || !motherphoneno) {
-//             res.send(400).json({ message: "All fields are required" })
-//         }
-
-//         const findUserEmail = await User.findOne({ email: email });
-
-//         if (findUserEmail) return res.status(400).json({ message: "Email already exist" });
-
-//     } catch (error) {
-//         res.status(400).json({ message: "Invalid user data" })
-//     }
-// }
+    } catch (error) {
+        console.log("Error in admin controller", error.message)
+        res.status(500).json({ message: "Internal server Error" })
+    }
+}
 
 export const addNewClass = async (req, res) => {
     const addsec = [{ section: "A" },
@@ -1696,78 +1706,149 @@ export const setClassAttendanceData = async (req, res) => {
 
 // faculty
 
+// export const addNewStaff = async (req, res) => {
+
+//     const {
+
+//         firstName,
+//         midName,
+//         lastName,
+//         gender,
+//         dob,
+//         email,
+//         phone,
+//         altphone,
+
+
+
+//         branch,
+//         roles,
+
+
+//     } = req.body;
+
+
+//     if (branch == 'Academic Staff') {
+
+
+
+
+//     } else {
+
+//     }
+
+
+
+
+
+// }
+
+
 export const addNewStaff = async (req, res) => {
-    const {
-        StudentClass,
-        firstName,
-        midName,
-        lastName,
-        gender,
-        dob,
-        nationality,
-        category,
-        subCategory,
-        quota,
-        motherTongue,
-        religion,
-        email,
-        phone,
-        altphone,
-        // aadhar,
+    try {
+        const {
+            firstName,
+            midName,
+            lastName,
+            gender,
+            dob,
+            email,
+            phone,
+            altphone,
+            branch,
+            roles,
+        } = req.body;
 
-        // fatherFirstName,
-        // fatherMidName,
-        // fatherLastName,
-        // fatherPhone,
-        // fatherEmail,
-        // fatherOccupation,
-        // fatherOfficeAddress,
-        // fatherQualification,
-        // fatherCollegeName,
-        // fatherCollegeAddress,
-        // fatherGraduationYear,
-        // fatherGraduationCertificate,
+        let newStaff;
 
-        // motherFirstName,
-        // motherMidName,
-        // motherLastName,
-        // motherPhone,
-        // motherEmail,
-        // motherOccupation,
-        // motherOfficeAddress,
-        // motherQualification,
-        // motherCollegeName,
-        // motherCollegeAddress,
-        // motherGraduationYear,
-        // motherGraduationCertificate,
+        if (branch === "Academic Staff") {
 
-        // guardianFirstName,
-        // guardianMidName,
-        // guardianLastName,
-        // guardianPhone,
-        // guardianEmail,
-        // guardianRelation,
-        // guardianOccupation,
-        // guardianOfficeAddress,
-        // guardianQualification,
-        // guardianCollegeName,
-        // guardianCollegeAddress,
-        // guardianGraduationYear,
-        // guardianGraduationCertificate,
+            // Academic staff
+            newStaff = new AcademicStaff({
+                firstName,
+                midName,
+                lastName,
+                gender,
+                dob,
+                email,
+                phone,
+                altPhone: altphone,
+                role: roles,
+                staffType: branch,
+                designation: roles,
+            });
+        } else {
 
-        // currentAddress,
-        // permanentAddress,
-        // hometown,
+            // Non-academic/general staff
+            newStaff = new Staff({
+                firstName,
+                midName,
+                lastName,
+                gender,
+                dob,
+                email,
+                phone,
+                alternatePhone: altphone,
+                role: roles,
+                staffType: branch,
+                designation: roles
 
-        // previousSchoolLastClass,
-        // previousSchoolName,
-        // previousSchoolLocation,
-        // previousSchoolLeavingYear,
-        // previousSchoolLastClassMarksheet,
-        // previousSchoolTransferCertificate,
-    } = req.body;
+            });
+        }
 
-}
+        const savedStaff = await newStaff.save();
+        return res.status(201).json({
+            message: "Staff added successfully",
+            data: savedStaff,
+        });
+    } catch (error) {
+        console.error("Error adding staff:", error);
+        return res.status(500).json({
+            message: "Failed to add staff",
+            error: error.message,
+        });
+    }
+};
+
+
+export const showAllStaff = async (req, res) => {
+    try {
+        // Academic staff (uses phone field)
+        const academicStaff = await AcademicStaff.find().select(
+            "id firstName midName lastName phone email staffType designation"
+        );
+
+        // General staff (uses mobile instead of phone)
+        const generalStaff = await Staff.find().select(
+            "id firstName midName lastName phone email staffType designation"
+        );
+
+        // Normalize general staff to have `phone` instead of `mobile`
+        const generalStaffFormatted = generalStaff.map((staff) => ({
+            id: staff.id,
+            firstName: staff.firstName,
+            midName: staff.midName,
+            lastName: staff.lastName,
+            phone: staff.phone,
+            email: staff.email,
+            staffType: staff.staffType,
+            designation: staff.designation,
+        }));
+
+        return res.status(200).json({
+            message: "Staff fetched successfully",
+            academic: academicStaff,   // academic staff
+            general: generalStaffFormatted, // general staff
+        });
+    } catch (error) {
+        console.error("Error fetching staff:", error);
+        return res.status(500).json({
+            message: "Failed to fetch staff",
+            error: error.message,
+        });
+    }
+};
+
 export const EditGeneralStaff = async (req, res) => {
     const {
         StudentClass,
@@ -1788,78 +1869,255 @@ export const EditGeneralStaff = async (req, res) => {
 
     } = req.body;
 
-}
-export const EditAcademicStaff = async (req, res) => {
-    const {
-        StudentClass,
-        firstName,
-        midName,
-        lastName,
-        gender,
-        dob,
-        nationality,
-        category,
-        subCategory,
-        quota,
-        motherTongue,
-        religion,
-        email,
-        phone,
-        altphone,
+};
 
-    } = req.body;
-
-}
 
 // faculty attendance
 
-export const UpdateStaffAttendance = async (req, res) => {
 
-    const { staffId, month, year, newStatus } = req.body;
+
+// export const updateStaffAttendance = async (req, res) => {
+//     try {
+//         const { id, month, year, attendance } = req.body; // from frontend
+
+//         if (!id || !month || !year || !attendance) {
+//             return res.status(400).json({ message: "Missing required fields" });
+//         }
+
+//         // Convert attendance object → array
+//         const attendanceArray = Object.entries(attendance).map(([date, status]) => ({
+//             date,
+//             status: status || "",
+//         }));
+
+//         // Step 1: Check if month-year record exists
+//         let record = await StaffAttendance.findOne({ month, year });
+
+//         if (record) {
+//             // Step 2: Check if staff exists inside this month-year
+//             const staffIndex = record.staffs.findIndex(
+//                 (staff) => staff.staffId.toString() === id
+//             );
+
+//             if (staffIndex > -1) {
+//                 // Staff exists → update attendance
+//                 record.staffs[staffIndex].attendance = attendanceArray;
+//             } else {
+//                 // Staff does not exist → push new staff entry
+//                 record.staffs.push({
+//                     staffId: id,
+//                     attendance: attendanceArray,
+//                 });
+//             }
+
+//             await record.save();
+//         } else {
+//             // Step 3: Month-year does not exist → create new record
+//             record = new StaffAttendance({
+//                 month,
+//                 year,
+//                 staffs: [
+//                     {
+//                         staffId: id,
+//                         attendance: attendanceArray,
+//                     },
+//                 ],
+//             });
+
+//             await record.save();
+//         }
+
+//         res.status(200).json({
+//             message: "Attendance updated successfully",
+//             data: record,
+//         });
+//     } catch (error) {
+//         console.error("Error updating attendance:", error);
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// };
+
+export const updateStaffAttendance = async (req, res) => {
     try {
-        const { date, status, remark } = newStatus; // newStatus should include date, status, and remark
+        const { id, staffModel, month, year, attendance } = req.body; // from frontend
 
-        // Find the attendance document
-        const attendanceDoc = await StaffAttendance.findOne({ staffId, month, year });
-
-        if (!attendanceDoc) {
-            console.log('No attendance document found');
-            return;
+        if (!id || !staffModel || !month || !year || !attendance) {
+            return res.status(400).json({ message: "Missing required fields" });
         }
 
-        // Find the index of the date to update
-        const index = attendanceDoc.attendance.findIndex(entry =>
-            entry.date.toISOString().split('T')[0] === new Date(date).toISOString().split('T')[0]
+        // Convert attendance object → array
+        const attendanceArray = Object.entries(attendance).map(([date, status]) => ({
+            date,
+            status: status || "",
+        }));
+
+        // Step 1: Check if month-year record exists
+        let record = await StaffAttendance.findOne({ month, year });
+
+        if (record) {
+            // Step 2: Check if staff exists inside this month-year
+            const staffIndex = record.staffs.findIndex(
+                (staff) =>
+                    staff.staffId.toString() === id &&
+                    staff.staffModel === staffModel
+            );
+
+            if (staffIndex > -1) {
+                // Staff exists → update attendance
+                record.staffs[staffIndex].attendance = attendanceArray;
+            } else {
+                // Staff does not exist → push new staff entry
+                record.staffs.push({
+                    staffId: id,
+                    staffModel,
+                    attendance: attendanceArray,
+                });
+            }
+
+            await record.save();
+        } else {
+            // Step 3: Month-year does not exist → create new record
+            record = new StaffAttendance({
+                month,
+                year,
+                staffs: [
+                    {
+                        staffId: id,
+                        staffModel,
+                        attendance: attendanceArray,
+                    },
+                ],
+            });
+
+            await record.save();
+        }
+
+        res.status(200).json({
+            message: "Attendance updated successfully",
+            data: record,
+        });
+    } catch (error) {
+        console.error("Error updating attendance:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+export const getStaffAttendance = async (req, res) => {
+    try {
+        const { id, month, year } = req.body; // receiving staffId, month, year
+
+        if (!id || !month || !year) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Step 1: Find month-year record
+        const record = await StaffAttendance.findOne({ month, year })
+            .populate("staffs.staffId"); // dynamic ref via refPath
+
+        if (!record) {
+            return res.status(200).json(false); // no month-year record
+        }
+
+        // Step 2: Check if staffId exists inside staffs[]
+        const staffData = record.staffs.find(
+            (staff) => staff.staffId && staff.staffId._id.toString() === id
         );
 
-        if (index !== -1) {
-            // Replace existing entry
-            attendanceDoc.attendance[index] = newStatus;
-        } else {
-            // If not found, optionally push the new status
-            attendanceDoc.attendance.push(newStatus);
+        if (!staffData) {
+            return res.status(200).json(false); // staff not found in this month-year
         }
 
-        // Save the document
-        await attendanceDoc.save();
-        console.log('Attendance updated successfully');
+        // Step 3: Return staff attendance
+        return res.status(200).json({
+            month: record.month,
+            year: record.year,
+            staff: staffData,
+        });
     } catch (error) {
-        console.error('Error updating attendance:', error);
+        console.error("Error fetching attendance:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-
-}
-
-export const GetAllStaffAttendance = async (req, res) => {
-
-}
-
-export const GetStaffAttendance = async (req, res) => {
+};
 
 
+export const getGeneralStaffAttendance = async (req, res) => {
+    try {
+        const { id, month, year } = req.body;
+
+        if (!id || !month || !year) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Step 1: Find month-year record
+        const record = await StaffAttendance.findOne({ month, year })
+            .populate("staffs.staffId");
+
+
+        console.log(record);
+
+
+        if (!record) {
+            return res.status(200).json(false);
+        }
+
+        const staffData = record.staffs.find(
+            (staff) => staff.staffId && staff.staffId._id.toString() === id
+        );
+
+        if (!staffData) {
+            return res.status(200).json(false);
+        }
+
+
+        return res.status(200).json({
+            month: record.month,
+            year: record.year,
+            staff: staffData,
+        });
+    } catch (error) {
+        console.error("Error fetching attendance:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+export const getAcademicStaffAttendance = async (req, res) => {
+    try {
+        const { id, month, year } = req.body;
+
+        if (!id || !month || !year) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Step 1: Find month-year record
+        const record = await StaffAttendance.findOne({ month, year })
+            .populate("staffs.staffId");
 
 
 
-}
+
+        if (!record) {
+            return res.status(200).json(false);
+        }
+
+        const staffData = record.staffs.find(
+            (staff) => staff.staffId && staff.staffId._id.toString() === id
+        );
+
+        if (!staffData) {
+            return res.status(200).json(false);
+        }
+
+
+        return res.status(200).json({
+            month: record.month,
+            year: record.year,
+            staff: staffData,
+        });
+    } catch (error) {
+        console.error("Error fetching attendance:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
 
 export const testing = async (req, res) => {
 

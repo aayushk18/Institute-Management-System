@@ -16,6 +16,7 @@ const academicStaffSchema = new mongoose.Schema({
     signature: { type: String }, // store file path or URL
 
 
+
     // 2. Contact Information
     phone: { type: String },
     altPhone: { type: String },
@@ -38,6 +39,7 @@ const academicStaffSchema = new mongoose.Schema({
     subjectExpertise: [String],
 
 
+
     // 4. Employment Details
     staffType: { type: String },
     designation: { type: String },
@@ -51,6 +53,8 @@ const academicStaffSchema = new mongoose.Schema({
         hra: { type: Number },
         allowances: { type: Number }
     },
+
+
 
     // 5. Login & System Access
     username: { type: String },
@@ -67,14 +71,6 @@ const academicStaffSchema = new mongoose.Schema({
         experienceLetters: [String],
         policeVerification: { type: String },
     },
-
-
-    // 7. Declaration
-    // agreed: { type: Boolean, default: false },
-    // signedBy: { type: String },
-    // signedDate: { type: Date, default: Date.now },
-
-
 
 
     classRange: [String],

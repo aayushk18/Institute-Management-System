@@ -383,6 +383,9 @@ export const useAdminStore = create((set) => ({
 
     },
 
+
+
+
     showRegistrationUser: async (Data) => {
         try {
 
@@ -474,7 +477,39 @@ export const useAdminStore = create((set) => ({
         }
 
 
-    }
+    },
+
+    newStaffRegistration: async (Data) => {
+
+        try {
+
+            await axiosInstance.post('/user/admin/faculty/newregistration', Data);
+            toast.success("New Staff Added Successfully")
+            return true
+        } catch (error) {
+
+            toast.error(error.response.data.message)
+        }
+
+    },
+
+    showAllStaff: async () => {
+
+        try {
+
+            const response = await axiosInstance.post('/user/admin/faculty/all-staff');
+            // toast.success("All staff")
+            const data = await response.data;
+            return data;
+        } catch (error) {
+
+            toast.error(error.response.data.message)
+        }
+
+    },
+
+
+
 
 
 }))

@@ -7,7 +7,7 @@ const staffSchema = new mongoose.Schema({
     midName: { type: String, },
     lastName: { type: String, },
     gender: { type: String },
-    dateOfBirth: { type: Date, },
+    dob: { type: Date, },
     nationality: { type: String },
     maritalStatus: { type: String },
     bloodGroup: { type: String },
@@ -15,9 +15,9 @@ const staffSchema = new mongoose.Schema({
     signature: { type: String },
 
     // 2. Contact Information
-    mobile: { type: String, required: true },
+    phone: { type: String },
     alternatePhone: { type: String },
-    email: { type: String, required: true, unique: true },
+    email: { type: String },
     presentAddress: { type: String },
     permanentAddress: { type: String },
 
@@ -26,8 +26,8 @@ const staffSchema = new mongoose.Schema({
     department: { type: String },
     designation: { type: String },
     dateOfJoining: { type: Date },
-    employeeId: { type: String, unique: true },
-    employmentType: { type: String, enum: ['Permanent', 'Contract', 'Outsourced'] },
+    employeeId: { type: String },
+    employmentType: { type: String },
     reportingAuthority: { type: String },
     salaryDetails: {
         basic: { type: Number },
@@ -44,9 +44,9 @@ const staffSchema = new mongoose.Schema({
     skills: [String],
 
     // 5. Login & System Access (if needed)
-    username: { type: String, unique: true },
+    username: { type: String },
     password: { type: String }, // hashed
-    role: { type: String, enum: ['Staff', 'Admin'], default: 'Staff' },
+    role: { type: String, },
     accessPermissions: [String],
 
     // 6. Documents Upload

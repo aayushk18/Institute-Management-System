@@ -55,6 +55,7 @@ import AcademicActiveClasses from './components/dashboards/AdminComponents/Acade
 import AcademicEditClasses from './components/dashboards/AdminComponents/Academic/AcademicEditClasses'
 import ExaminationDatesheet from './components/dashboards/AdminComponents/Academic/Examination/ExaminationDatesheet'
 import SubjectAdmin from './components/dashboards/AdminComponents/Academic/Subjects/SubjectAdmin'
+import FacultyAttendanceTable from './components/dashboards/AdminComponents/Faculty/FacultyAttendanceTable'
 
 
 
@@ -126,8 +127,8 @@ function App() {
             <Route path='general-staff' element={<AddNewFaculty2 />} />
             <Route path='edit-staff-3' element={<AddNewFaculty3 />} />
             <Route path='feedback' element={<FacultyFeedback />} />
-            <Route path='attendance' element={<FacultyAttendancePage />} />
-
+            <Route path='attendance' element={<FacultyAttendanceTable />} />
+            <Route path='attendance/:userid' element={<FacultyAttendancePage />} />
             <Route path='new-teacher' element={<AddTeacher />} />
 
 
@@ -162,7 +163,6 @@ function App() {
               <Route path='' element={<NewRegistrationForm />}>
               </Route>
               <Route path='details/:userid' element={<NewRegistrationDetails />} />
-
               <Route path='page-1/:userid' element={<NewRegistration1 />} />
               <Route path='page-2/:userid' element={<NewRegistration2 />} />
               <Route path='page-3/:userid' element={<NewRegistration3 />} />

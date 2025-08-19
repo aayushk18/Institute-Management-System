@@ -84,7 +84,9 @@ const AddNewFaculty2 = () => {
 
 
     const [formData, setFormData] = useState({
-        fullName: '',
+        firstName: '',
+        midName: '',
+        lastName: '',
         gender: '',
         dob: '',
         nationality: '',
