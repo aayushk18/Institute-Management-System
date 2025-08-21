@@ -87,7 +87,7 @@ export const addNewClass = async (req, res) => {
 
     }
 
-} // tested
+}
 
 export const ActivateStudent = async (req, res) => {
 
@@ -108,6 +108,7 @@ export const ActivateStudent = async (req, res) => {
 
 
 }
+
 export const InactivateStudent = async (req, res) => {
 
     const { studentId } = req.body;
@@ -181,6 +182,7 @@ export const updateAdmin = async (req, res) => {
         res.status(500).json({ message: "Internal server Error" })
     }
 }
+
 export const resetrollno = async (req, res) => {
 
     try {
@@ -617,7 +619,6 @@ export const addNewRegistration = async (req, res) => {
 
 }
 
-
 export const updateStudentRegistrationDetails = async (req, res) => {
     const {
         checkStudentClass,
@@ -697,7 +698,6 @@ export const updateStudentRegistrationDetails = async (req, res) => {
     }
 
 }
-
 
 export const updateParentRegistrationDetails = async (req, res) => {
     const {
@@ -1037,6 +1037,7 @@ export const showAllNewRegistration = async (req, res) => {
         // res.status(401).json({ message: "Unable to find students" })
     }
 }
+
 export const showRegistrationUser = async (req, res) => {
 
     const { StudentClass, firstName, dob, email, phone } = req.body;
@@ -1849,26 +1850,248 @@ export const showAllStaff = async (req, res) => {
     }
 };
 
-export const EditGeneralStaff = async (req, res) => {
-    const {
-        StudentClass,
-        firstName,
-        midName,
-        lastName,
-        gender,
-        dob,
-        nationality,
-        category,
-        subCategory,
-        quota,
-        motherTongue,
-        religion,
-        email,
-        phone,
-        altphone,
 
-    } = req.body;
 
+export const getAcademicStaffFormData = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Academic Staff ID is required" });
+        }
+
+        // validate ObjectId
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ success: false, message: "Invalid Academic Staff ID format" });
+        }
+
+        const academicStaffData = await AcademicStaff.findById(id);
+
+        if (!academicStaffData) {
+            return res.status(404).json({ success: false, message: "Academic Staff not found" });
+        }
+
+        // Exclude sensitive fields (like password) before sending response
+        const staffResponse = academicStaffData.toObject();
+        delete staffResponse.password;
+
+        return res.status(200).json({ success: true, data: staffResponse });
+    } catch (error) {
+        console.error("Error fetching academic staff details:", error);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+
+export const getGeneralStaffFormData = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+
+            return res.status(400).json({ success: false, message: "Staff ID is required" });
+
+        }
+
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+
+            return res.status(400).json({ success: false, message: "Invalid Staff ID format" });
+
+        }
+
+        const staffData = await Staff.findById(id);
+
+        if (!staffData) {
+            return res.status(404).json({ success: false, message: "Staff not found" });
+        }
+
+        return res.status(200).json({ success: true, data: staffData });
+
+    } catch (error) {
+
+        console.error("Error fetching staff details:", error);
+        return res.status(500).json({ success: false, message: "Server error" });
+
+    }
+};
+
+
+export const updateGeneralStaffFormData = async (req, res) => {
+    try {
+        const { id, updateData } = req.body;
+        console.log(updateData);
+
+
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Staff ID is required" });
+        }
+
+        // validate MongoDB ObjectId format
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ success: false, message: "Invalid Staff ID format" });
+        }
+
+        // prevent password from being updated directly
+        if (updateData.password) {
+            delete updateData.password;
+        }
+
+        const updatedStaff = await Staff.findByIdAndUpdate(
+            id,
+            { $set: updateData },
+            { new: true, runValidators: true } // return updated doc & apply schema validations
+        );
+
+        if (!updatedStaff) {
+            return res.status(404).json({ success: false, message: "Staff not found" });
+        }
+
+        const staffResponse = updatedStaff.toObject();
+        delete staffResponse.password; // hide password from response
+
+        return res.status(200).json({
+            success: true,
+            message: "Staff updated successfully",
+            data: staffResponse
+        });
+    } catch (error) {
+        console.error("Error updating staff:", error);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+
+
+
+// PUT /api/academic-staff/:id
+export const updateAcademicStaffFormData = async (req, res) => {
+    try {
+        const { id, updateData } = req.body;
+        console.log(updateData);
+
+        {
+
+            // firstName: { type: String, },
+            // midName: { type: String, },
+            // lastName: { type: String, },
+            // gender: { type: String, },
+            // dob: { type: Date },
+            // nationality: { type: String },
+            // maritalStatus: { type: String, }
+            // bloodGroup: { type: String },
+            // photo: { type: String }, // store file path or URL
+            // signature: { type: String }, // store file path or URL
+
+
+
+            // // 2. Contact Information
+            // phone: { type: String },
+            // altPhone: { type: String },
+            // email: { type: String, },
+            // presentAddress: { type: String },
+            // permanentAddress: { type: String },
+
+
+
+            // // 3. Academic & Professional Qualifications
+            // highestQualification: { type: String },
+            // specialization: { type: String },
+            // otherCertifications: [String],
+            // yearsOfExperience: { type: Number },
+            // previousInstitutions: [{
+            //     name: String,
+            //     position: String,
+            //     duration: String
+            // }],
+            // subjectExpertise: [String],
+
+
+
+            // // 4. Employment Details
+            // staffType: { type: String },
+            // designation: { type: String },
+            // department: { type: String },
+            // dateOfJoining: { type: Date },
+            // employeeId: { type: String },
+            // employmentType: { type: String },
+            // reportingAuthority: { type: String },
+            // salaryDetails: {
+            //     basic: { type: Number },
+            //     hra: { type: Number },
+            //     allowances: { type: Number }
+            // },
+
+
+
+            // // 5. Login & System Access
+            // username: { type: String },
+            // password: { type: String },
+            // role: { type: String },
+            // accessPermissions: [String],
+
+
+            // // 6. Documents Upload
+            // documents: {
+            //     resume: { type: String },
+            //     idProof: { type: String },
+            //     qualificationCertificates: [String],
+            //     experienceLetters: [String],
+            //     policeVerification: { type: String },
+            // },
+
+
+            // classRange: [String],
+
+
+            // classes: [
+            //     { StudentClass: { type: String } },
+            //     { subject: { type: String } }
+            // ],
+
+
+
+        }
+
+
+
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Academic Staff ID is required" });
+        }
+
+        // Validate ObjectId
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ success: false, message: "Invalid Academic Staff ID format" });
+        }
+
+        // Prevent direct password overwrite unless explicitly allowed
+        if (updateData.password) {
+            delete updateData.password;
+        }
+
+        const updatedStaff = await AcademicStaff.findByIdAndUpdate(
+            id,
+            { $set: updateData },
+            { new: true, runValidators: true } // return updated doc, apply schema validation
+        );
+
+        if (!updatedStaff) {
+            return res.status(404).json({ success: false, message: "Academic Staff not found" });
+        }
+
+        const staffResponse = updatedStaff.toObject();
+        delete staffResponse.password; // remove sensitive info
+
+        return res.status(200).json({
+            success: true,
+            message: "Academic Staff updated successfully",
+            data: staffResponse
+        });
+    } catch (error) {
+        console.error("Error updating academic staff:", error);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
 };
 
 

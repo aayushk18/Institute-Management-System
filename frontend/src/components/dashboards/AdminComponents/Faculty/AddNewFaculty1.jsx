@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../../../utils/axios';
+import toast from 'react-hot-toast'
 
 
 const AddNewFaculty1 = () => {
 
+    // ACADEMIC  STAFF
+
+    const navigate = useNavigate()
 
     const student = []
 
     const personalDetails = [
-        { label: "Full Name", key: "fullName", type: "text", colSpan: 1 },
+        { label: "Full Name", key: "firstName", type: "text", colSpan: 1 },
         { label: "Mid Name", key: "midName", type: "text", colSpan: 1 },
         { label: "Last Name", key: "lastName", type: "text", colSpan: 1 },
         { label: "Gender", key: "gender", type: "select", options: [{ val: "Select" }, { val: "Male" }, { val: "Female" }, { val: "Other" }], colSpan: 1 },
@@ -78,6 +84,37 @@ const AddNewFaculty1 = () => {
     });
 
 
+    const location = useLocation();
+    const state = location.state;
+    const faculty = state?.pass;
+
+    console.log(faculty);
+
+    const getFacultyFormData = async () => {
+        const data = {
+            id: faculty._id
+        }
+
+        const response = await axiosInstance.post('/user/admin/faculty/academic-staff-form', data)
+        const Data = response.data;
+        console.log(Data.data);
+
+        Data.data.dob = Data.data.dob.split('T')[0]
+        console.log(Data.data);
+        setFormData(Data.data)
+        console.log(formData);
+    }
+
+    useEffect(() => {
+
+        getFacultyFormData()
+
+    }, [])
+
+
+
+
+
     const [previousInstitutions, setPreviousInstitutions] = useState([]);
     const [newInstitution, setNewInstitution] = useState({ name: '', position: '', duration: '' });
 
@@ -130,15 +167,35 @@ const AddNewFaculty1 = () => {
         setPreviousInstitutions(previousInstitutions.filter((_, i) => i !== index));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+
         const fullData = {
             ...formData,
             previousInstitutions,
             subjects,
             assignedClasses: selectedClasses,
         };
+
         console.log('Submitted Data:', fullData);
+        const Data = {
+            id: faculty._id,
+            updateData: fullData
+        }
+
+
+        const response = await axiosInstance.post('/user/admin/faculty/update-academic-staff-form', Data);
+        const data = response.data;
+        console.log(data);
+
+        if (data.success == true) {
+            toast.success('Academic Staff Details Updated')
+            navigate('/admin/faculties/all-staff')
+        }
+
+
+
     };
 
 
@@ -400,7 +457,6 @@ const AddNewFaculty1 = () => {
 
                                 </div>
 
-
                                 {/* Employment */}
                                 <div className='w-full mb-15 pb-5  border-gray-300 border-b-2 flex flex-row place-items-center  justify-between'>
 
@@ -412,6 +468,7 @@ const AddNewFaculty1 = () => {
 
 
                                 </div>
+
                                 <div className="grid grid-cols-1 mb-10 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
 
                                     {employmentDetails.map(({ label, key, type, colSpan = 1, options }) => (
@@ -486,6 +543,7 @@ const AddNewFaculty1 = () => {
 
 
                                 </div>
+
                                 <div className="grid grid-cols-1 mb-10 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
 
                                     {systemAccess.map(({ label, key, type, colSpan = 1, options }) => (

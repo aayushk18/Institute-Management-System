@@ -29,11 +29,11 @@ const staffSchema = new mongoose.Schema({
     employeeId: { type: String },
     employmentType: { type: String },
     reportingAuthority: { type: String },
-    salaryDetails: {
-        basic: { type: Number },
-        hra: { type: Number },
-        allowances: { type: Number }
-    },
+
+    salaryDetails_basic: { type: Number },
+    salaryDetails_hra: { type: Number },
+    salaryDetails_allowances: { type: Number },
+
 
     // 4. Professional Background
     workHistory: [{
@@ -50,13 +50,13 @@ const staffSchema = new mongoose.Schema({
     accessPermissions: [String],
 
     // 6. Documents Upload
-    documents: {
-        resume: { type: String },
-        idProof: { type: String },
-        qualificationCertificates: [String],
-        experienceLetters: [String],
-        policeVerification: { type: String },
-    },
+
+    documents_resume: { type: String },
+    documents_idProof: { type: String },
+    documents_qualificationCertificates: [String],
+    documents_experienceLetters: [String],
+    documents_policeVerification: { type: String },
+
 
     // // 7. Declaration
     // declaration: {

@@ -130,7 +130,8 @@ const FacultyAttendancePage = () => {
 
 
   useEffect(() => {
-    // Ensure days are recalculated
+
+
     const initial = {};
     days.forEach(({ dateStr, isSunday }) => {
       initial[dateStr] = isSunday ? 'Sunday' : '';
@@ -140,6 +141,8 @@ const FacultyAttendancePage = () => {
     getAttendance()
 
     setAttendance(initial); // Reset attendance to only include current month's days
+
+
   }, [selectedMonth, selectedYear]);
 
 

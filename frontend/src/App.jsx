@@ -12,7 +12,6 @@ import AdminHomepage from './components/dashboards/AdminComponents/AdminHomepage
 import { Toaster } from 'react-hot-toast'
 import AddStudent from './components/dashboards/AdminComponents/AddStudent'
 import StaffAdminComponent from './components/dashboards/AdminComponents/StaffAdminComponent'
-
 import AddTeacher from './components/dashboards/AdminComponents/AddTeacher'
 import AcademicsAdminDashboard from './components/dashboards/AdminComponents/AcademicsAdminDashboard'
 import SettingsAdminComponent from './components/dashboards/AdminComponents/SettingsAdminComponent'
@@ -43,7 +42,6 @@ import NewRegistration3 from './components/dashboards/AdminComponents/NewRegistr
 import NewRegistration4 from './components/dashboards/AdminComponents/NewRegistration4'
 import NewRegistrationForm from './components/dashboards/AdminComponents/NewRegistrationForm'
 import NewRegistrationDetails from './components/dashboards/AdminComponents/NewRegistrationDetails'
-import StaffTable from './components/dashboards/AdminComponents/StaffTable'
 import AddNewFaculty from './components/dashboards/AdminComponents/Faculty/AddNewFaculty'
 import AddNewFaculty1 from './components/dashboards/AdminComponents/Faculty/AddNewFaculty1'
 import AddNewFaculty2 from './components/dashboards/AdminComponents/Faculty/AddNewFaculty2'
@@ -56,6 +54,7 @@ import AcademicEditClasses from './components/dashboards/AdminComponents/Academi
 import ExaminationDatesheet from './components/dashboards/AdminComponents/Academic/Examination/ExaminationDatesheet'
 import SubjectAdmin from './components/dashboards/AdminComponents/Academic/Subjects/SubjectAdmin'
 import FacultyAttendanceTable from './components/dashboards/AdminComponents/Faculty/FacultyAttendanceTable'
+import StaffTable from './components/dashboards/AdminComponents/Faculty/StaffTable'
 
 
 
@@ -123,8 +122,8 @@ function App() {
           <Route path='faculties' element={<StaffAdminComponent />}>
             <Route path='all-staff' element={<StaffTable />} />
             <Route path='new-staff' element={<AddNewFaculty />} />
-            <Route path='academic-staff' element={<AddNewFaculty1 />} />
-            <Route path='general-staff' element={<AddNewFaculty2 />} />
+            <Route path='academic-staff/:userid' element={<AddNewFaculty1 />} />
+            <Route path='general-staff/:userid' element={<AddNewFaculty2 />} />
             <Route path='edit-staff-3' element={<AddNewFaculty3 />} />
             <Route path='feedback' element={<FacultyFeedback />} />
             <Route path='attendance' element={<FacultyAttendanceTable />} />

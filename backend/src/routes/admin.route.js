@@ -1,6 +1,6 @@
 import express from "express"
 import { checkAuth, login, logout } from "../controllers/auth.controller.js";
-import { AddNewStaff, AddStudentAccount, getAllStudents, resetrollno, setTimetableForClass, testing, updateAdmin, addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic, addNewStaff, ActivateStudent, InactivateStudent, setStudentsForClass, getStudentsForClass, getStudentsFromClass, getClassData, getClassAttendanceData, showAllStaff, homeDashboardData, updateStaffAttendance, getGeneralStaffAttendance, getAcademicStaffAttendance } from "../controllers/admin.controller.js";
+import { AddNewStaff, AddStudentAccount, getAllStudents, resetrollno, setTimetableForClass, testing, updateAdmin, addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic, addNewStaff, ActivateStudent, InactivateStudent, setStudentsForClass, getStudentsForClass, getStudentsFromClass, getClassData, getClassAttendanceData, showAllStaff, homeDashboardData, updateStaffAttendance, getGeneralStaffAttendance, getAcademicStaffAttendance, getAcademicStaffFormData, getGeneralStaffFormData, updateAcademicStaffFormData, updateGeneralStaffFormData } from "../controllers/admin.controller.js";
 import { AddHomework, findTimetableforTeacher, homeworkUpdateToTeacher, showStudents, uploadResult, uploadTestMarks } from "../controllers/staff.controller.js";
 import { findTimetableforStudent, showHomeworks, uploadHomework } from "../controllers/student.controller.js";
 import { protectRoute } from "../middlewares/auth.middleware.js";
@@ -144,6 +144,12 @@ try {
     router.post('/admin/faculty/all-staff', showAllStaff)
     router.post('/admin/faculty/update-attendance', updateStaffAttendance)
     router.post('/admin/faculty/get-general-staff-attendance', getGeneralStaffAttendance)
+    router.post('/admin/faculty/academic-staff-form', getAcademicStaffFormData)
+    router.post('/admin/faculty/general-staff-form', getGeneralStaffFormData)
+
+    router.post('/admin/faculty/update-general-staff-form', updateGeneralStaffFormData)
+    router.post('/admin/faculty/update-academic-staff-form', updateAcademicStaffFormData)
+
 
 
 

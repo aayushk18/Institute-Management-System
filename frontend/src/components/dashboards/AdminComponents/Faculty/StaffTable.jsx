@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { useAdminStore } from '../../utils/useAuthStore';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAdminStore } from '../../../utils/useAuthStore';
 import { Loader } from 'lucide-react';
 
 
@@ -10,6 +10,8 @@ const StaffTable = () => {
     const data = Array.from({ length: 53 }, (_, i) => ({
 
     }));
+
+    const navigate = useNavigate()
 
     const [search, setSearch] = useState('');
     const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -150,7 +152,14 @@ const StaffTable = () => {
                                         <button className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
                                             View
                                         </button>
-                                        <button className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
+                                        <button onClick={() => {
+                                            if (staff.staffType == "Academic Staff") {
+                                                navigate(`/admin/faculties/academic-staff/${staff.firstName}-${staff.phone}`, { state: { pass: staff } })
+                                            } else {
+                                                navigate(`/admin/faculties/general-staff/${staff.firstName}-${staff.phone}`, { state: { pass: staff } })
+                                            }
+                                        }}
+                                            className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">
                                             Edit
                                         </button>
                                     </td>

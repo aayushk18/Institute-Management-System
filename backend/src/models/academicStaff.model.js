@@ -48,11 +48,11 @@ const academicStaffSchema = new mongoose.Schema({
     employeeId: { type: String },
     employmentType: { type: String },
     reportingAuthority: { type: String },
-    salaryDetails: {
-        basic: { type: Number },
-        hra: { type: Number },
-        allowances: { type: Number }
-    },
+
+    salaryDetails_basic: { type: Number },
+    salaryDetails_hra: { type: Number },
+    salaryDetails_allowances: { type: Number },
+
 
 
 
@@ -64,13 +64,13 @@ const academicStaffSchema = new mongoose.Schema({
 
 
     // 6. Documents Upload
-    documents: {
-        resume: { type: String },
-        idProof: { type: String },
-        qualificationCertificates: [String],
-        experienceLetters: [String],
-        policeVerification: { type: String },
-    },
+
+    salaryDetails_resume: { type: String },
+    salaryDetails_idProof: { type: String },
+    salaryDetails_qualificationCertificates: [String],
+    salaryDetails_experienceLetters: [String],
+    salaryDetails_policeVerification: { type: String },
+
 
 
     classRange: [String],

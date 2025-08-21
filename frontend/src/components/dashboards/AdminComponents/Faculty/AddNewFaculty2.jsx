@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { axiosInstance } from '../../../utils/axios'
+import toast from 'react-hot-toast'
 
 const AddNewFaculty2 = () => {
 
+    // GENERAL  STAFF
+    const navigate = useNavigate()
 
     // formFields.js
     const student = []
@@ -58,11 +63,11 @@ const AddNewFaculty2 = () => {
     ]
     const documentUploads = [
         // 6. Document Uploads
-        { label: "Resume ", key: "documents.resume", type: "text", colSpan: 2 },
-        { label: "ID Proof  ", key: "documents.idProof", type: "text", colSpan: 2 },
-        { label: "Qualification Certificates ", key: "documents.qualificationCertificates", type: "text", colSpan: 2 },
-        { label: "Experience Letters ", key: "documents.experienceLetters", type: "text", colSpan: 2 },
-        { label: "Police Verification ", key: "documents.policeVerification", type: "text", colSpan: 2 },
+        { label: "Resume ", key: "documents_resume", type: "text", colSpan: 2 },
+        { label: "ID Proof  ", key: "documents_idProof", type: "text", colSpan: 2 },
+        { label: "Qualification Certificates ", key: "documents_qualificationCertificates", type: "text", colSpan: 2 },
+        { label: "Experience Letters ", key: "documents_experienceLetters", type: "text", colSpan: 2 },
+        { label: "Police Verification ", key: "documents_policeVerification", type: "text", colSpan: 2 },
     ];
     const bankDetails = [
         { label: "Account Holder Name", key: "accountHolderName", type: "text", colSpan: 2 },
@@ -80,6 +85,26 @@ const AddNewFaculty2 = () => {
         },
     ];
 
+    const getFacultyFormData = async () => {
+        const data = {
+            id: faculty.id
+        }
+
+        const response = await axiosInstance.post('/user/admin/faculty/general-staff-form', data)
+        const Data = response.data;
+        console.log(Data.data);
+
+        Data.data.dob = Data.data.dob.split('T')[0]
+        setFormData(Data.data)
+        console.log(formData);
+
+    }
+
+    useEffect(() => {
+
+        getFacultyFormData()
+
+    }, [])
 
 
 
@@ -96,9 +121,7 @@ const AddNewFaculty2 = () => {
         altPhone: '',
         email: '',
         presentAddress: '',
-        permanentAddress: '',
-
-
+        permanentAddress: ''
     });
 
 
@@ -113,11 +136,11 @@ const AddNewFaculty2 = () => {
         });
     };
 
-    const allClasses = [
-        "Nursery", "LKG", "UKG",
-        "1", "2", "3", "4", "5", "6",
-        "7", "8", "9", "10", "11", "12",
-    ];
+    const location = useLocation();
+    const state = location.state;
+    const faculty = state?.pass;
+
+
     const [selectedClasses, setSelectedClasses] = useState([]);
 
 
@@ -157,7 +180,7 @@ const AddNewFaculty2 = () => {
         setPreviousInstitutions(previousInstitutions.filter((_, i) => i !== index));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const fullData = {
             ...formData,
@@ -166,6 +189,20 @@ const AddNewFaculty2 = () => {
             assignedClasses: selectedClasses,
         };
         console.log('Submitted Data:', fullData);
+        const Data = {
+            id: faculty.id,
+            updateData: fullData
+        }
+
+
+        const response = await axiosInstance.post('/user/admin/faculty/update-general-staff-form', Data);
+        const data = response.data;
+        console.log(data);
+
+        if (data.success == true) {
+            toast.success('Academic Staff Details Updated')
+            navigate('/admin/faculties/all-staff')
+        }
     };
 
 

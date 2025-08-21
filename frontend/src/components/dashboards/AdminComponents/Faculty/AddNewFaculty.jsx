@@ -181,9 +181,6 @@ const AddNewFaculty = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(form);
-
-
         const success = validateForm()
 
         if (selectedBranch == 'Academic Staff') {
@@ -191,7 +188,7 @@ const AddNewFaculty = () => {
 
                 const st = await newStaffRegistration(form);
                 if (st === true) {
-                    navigate(`/admin/faculties/academic-staff`, { state: { pass: form } })
+                    navigate(`/admin/faculties/academic-staff/${form.firstName}-${form.phone}`, { state: { pass: form } })
                 }
             }
         } else if (selectedBranch == '' || !selectedBranch) {
@@ -201,9 +198,8 @@ const AddNewFaculty = () => {
 
             const st = await newStaffRegistration(form)
             if (st === true) {
-                navigate(`/admin/faculties/general-staff`, { state: { pass: form } })
+                navigate(`/admin/faculties/general-staff/${form.firstName}-${form.phone}`, { state: { pass: form } })
             }
-
         }
 
 
