@@ -36,8 +36,12 @@ const staffSchema = new mongoose.Schema({
 
 
     // 4. Professional Background
+    highestQualification: { type: String },
+    specialization: { type: String },
+    otherCertifications: [String],
+    yearsOfExperience: { type: Number },
     workHistory: [{
-        organization: String,
+        name: String,
         position: String,
         duration: String,
     }],
@@ -57,6 +61,15 @@ const staffSchema = new mongoose.Schema({
     documents_experienceLetters: [String],
     documents_policeVerification: { type: String },
 
+
+
+    // 6. Bank Detials 
+    accountHolderName: { type: String },
+    bankName: { type: String },
+    accountNumber: { type: String },
+    ifscCode: { type: String },
+    branch: { type: String },
+    accountType: { type: String },
 
     // // 7. Declaration
     // declaration: {

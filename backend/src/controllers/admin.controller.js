@@ -448,6 +448,8 @@ export const setClassesAndSubjectsForTeacher = async (req, res) => {
 
 }
 
+
+
 // admission
 
 export const addNewRegistration = async (req, res) => {
@@ -915,8 +917,6 @@ export const updateOthertRegistrationDetails = async (req, res) => {
     }
 }
 
-
-
 export const showAllNewRegistration = async (req, res) => {
 
     const data = []
@@ -1096,6 +1096,7 @@ export const UploadStudentpic = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
+
 export const UploadFatherpic = async (req, res) => {
     try {
 
@@ -1132,6 +1133,7 @@ export const UploadFatherpic = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
+
 export const UploadMotherpic = async (req, res) => {
     try {
 
@@ -1168,6 +1170,7 @@ export const UploadMotherpic = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
+
 export const UploadGuardianpic = async (req, res) => {
     try {
 
@@ -1205,75 +1208,132 @@ export const UploadGuardianpic = async (req, res) => {
     }
 }
 
+
 // student attendance
 export const UpdateStudentAttendance = async (req, res) => {
 
-    const { staffId, month, year, newStatus } = req.body;
+
+
     try {
-        const { date, status, remark } = newStatus; // newStatus should include date, status, and remark
+        const { StudentClass, section, studentId, date, status, month, year } = req.body;
 
-        // Find the attendance document
-        const attendanceDoc = await StaffAttendance.findOne({ staffId, month, year });
-
-        if (!attendanceDoc) {
-            console.log('No attendance document found');
-            return;
+        if (!StudentClass || !date || !status || month === undefined || year === undefined) {
+            return res.status(400).json({ message: "Missing required fields" });
         }
 
+        // 1️⃣ Find the attendance document for given month & year
+        let attendanceDoc = await StudentAttendance.findOne({ month, year });
 
-        const index = attendanceDoc.attendance.findIndex(entry =>
-            entry.date.toISOString().split('T')[0] === new Date(date).toISOString().split('T')[0]
+        // If not exists → create fresh doc
+        if (!attendanceDoc) {
+            attendanceDoc = new StudentAttendance({
+                month,
+                year,
+                classes: [],
+            });
+        }
+
+        // 2️⃣ Find the class & section inside this doc
+        let classData = attendanceDoc.classes.find(
+            (c) => c.StudentClass === StudentClass && c.section === section
         );
 
-        if (index !== -1) {
-            // Replace existing entry
-            attendanceDoc.attendance[index] = newStatus;
-        } else {
-            // If not found, optionally push the new status
-            attendanceDoc.attendance.push(newStatus);
+        if (!classData) {
+            classData = {
+                StudentClass,
+                section,
+                students: [],
+            };
+            attendanceDoc.classes.push(classData);
         }
 
-        // Save the document
+        // 3️⃣ Find student inside class
+        let studentData = classData.students.find(
+            (s) => String(s.studentId) === String(studentId)
+        );
+
+        if (!studentData) {
+            studentData = {
+                studentId,
+                attendance: [],
+            };
+            classData.students.push(studentData);
+        }
+
+        // 4️⃣ Update or Insert attendance for this date
+        const existingDay = studentData.attendance.find((a) => a.date === date);
+
+        if (existingDay) {
+            existingDay.status = status; // update status if already exists
+        } else {
+            studentData.attendance.push({ date, status });
+        }
+
+        // 5️⃣ Save final document
         await attendanceDoc.save();
-        console.log('Attendance updated successfully');
-    } catch (error) {
-        console.error('Error updating attendance:', error);
+
+        return res.status(200).json({
+            success: true,
+            message: "Attendance updated successfully",
+            data: attendanceDoc,
+        });
+    } catch (err) {
+        console.error("Error updating attendance:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: err.message,
+        });
     }
+};
 
-}
+export const getOneStudentAttendance = async (req, res) => {
+    try {
 
-export const GetAllStudentAttendance = async (req, res) => {
+        const { studentId, month, year, classId, section } = req.query;
 
-    const { StudentClass, section, month } = req.body;
+        if (!studentId || month === undefined || year === undefined || !classId || !section) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
 
-    const attendance = [];
+        const attendanceDoc = await StudentAttendance.findOne({ month, year });
 
-    const record = await StudentAttendance.findOne({
-        StudentClass,
-        section,
-        "months.month": month,
-    }, {
-        "months.$": 1 // projection: return only the matched month
-    });
+        if (!attendanceDoc) {
+            return res.status(404).json({ message: "No attendance found for this month/year" });
+        }
 
+        const classData = attendanceDoc.classes.find(
+            (c) => c.StudentClass === classId && c.section === section
+        );
 
+        if (!classData) {
+            return res.status(404).json({ message: "Class/Section not found in this record" });
+        }
 
+        const studentData = classData.students.find(
+            (s) => String(s.studentId) === String(studentId)
+        );
 
+        if (!studentData) {
+            return res.status(404).json({ message: "Student not found in this class/section" });
+        }
 
-    const checkEvent = Event.findOne({ year, month });
-
-    if (checkEvent) {
-
-
-
-        checkEvent.dates.map((el) => {
-            // if el.date exist in attendance then replace attendance with event value it
-
-
-        })
-
+        return res.status(200).json({
+            success: true,
+            studentId: studentData.studentId,
+            month,
+            year,
+            attendance: studentData.attendance,
+        });
+    } catch (err) {
+        console.error("Error fetching student attendance:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: err.message,
+        });
     }
-}
+};
 
 // class
 
@@ -1373,7 +1433,6 @@ export const setStudentsForClass = async (req, res) => {
     }
 
 }
-
 
 export const getStudentsForClass = async (req, res) => {
     const { StudentClass, section } = req.body;
@@ -1488,261 +1547,9 @@ export const getClassData = async (req, res) => {
     }
 }
 
-export const getClassAttendanceData = async (req, res) => {
-
-    const { StudentClass, section, date, month, year } = req.body;
-
-    try {
-
-        const classDoc = await Classes.findOne({ StudentClass });
-
-        if (!classDoc) {
-            return res.status(404).json({ message: "Class not found" });
-        }
-
-        // Find the section in the class
-        const targetSection = classDoc.sections.find(sec => sec.section === section);
-
-        if (!targetSection) {
-            return res.status(404).json({ message: "Section not found" });
-        }
-
-
-        const stu = await Student.find({ StudentClass, section })
-
-
-        const matchedData = stu.filter(student => targetSection.students.includes(student.id))
-
-
-        const attendanceClass = StudentAttendance.findOne({ StudentClass, section })
-
-
-        if (!attendanceClass) {
-            const attendanceClass = new StudentAttendance({
-                StudentClass,
-                section,
-                months: [year, month]
-            })
-
-            const AttMonth = attendanceClass.months.push({
-                year,
-                month
-            })
-
-
-
-
-            // await attendanceClass.save()
-
-            matchedData.map((el) => {
-                data.push({
-                    id: el.id,
-                    firstName: el.firstName,
-                    midName: el.midName,
-                    lastName: el.lastName,
-                    Roll_no: el.Roll_no,
-                    StudentClass: el.StudentClass,
-                    section: el.section,
-                    active: el.active
-                })
-            })
-
-            return res.status(200).json(data)
-
-        }
-
-        const targetedMonth = classDoc.months.find(sec => sec.section === section);
-
-
-        const attendanceData = matchedData
-            .map(s => {
-                const matched = attendance.find(a => a.id === s.id);
-                if (matched) {
-                    return { ...s, status: matched.status };
-                }
-                return null;
-            })
-            .filter(Boolean); // remove nulls
-
-        attendanceData.map((el) => {
-
-            data.push({
-
-                id: el.id,
-                firstName: el.firstName,
-                midName: el.midName,
-                lastName: el.lastName,
-                Roll_no: el.Roll_no,
-                StudentClass: el.StudentClass,
-                section: el.section,
-                active: el.active,
-                status: el.status
-
-            })
-
-        })
-
-
-
-
-
-
-
-    }
-    catch (error) {
-
-        return res.status(500).json({ message: "Internal server Error" })
-
-    }
-}
-
-export const setClassAttendanceData = async (req, res) => {
-
-    const { StudentClass, section, date, month, year, updatingData } = req.body;
-
-    try {
-
-
-        const classDoc = await Classes.findOne({ StudentClass });
-
-        if (!classDoc) {
-            return res.status(404).json({ message: "Class not found" });
-        }
-
-        // Find the section in the class
-        const targetSection = classDoc.sections.find(sec => sec.section === section);
-
-        if (!targetSection) {
-            return res.status(404).json({ message: "Section not found" });
-        }
-
-        const stu = await Student.find({ StudentClass, section })
-
-
-        const matchedData = stu.filter(student => targetSection.students.includes(student.id))
-
-
-        const attendanceClass = StudentAttendance.findOne({ StudentClass, section })
-
-        if (!attendanceClass) {
-            const attendanceClass = StudentAttendance({
-                StudentClass,
-                section
-            })
-
-            attendanceClass.months.push({
-                year,
-                month
-            })
-
-
-            await attendanceClass.save()
-
-            matchedData.map((el) => {
-
-                data.push({
-
-                    id: el.id,
-                    firstName: el.firstName,
-                    midName: el.midName,
-                    lastName: el.lastName,
-                    Roll_no: el.Roll_no,
-                    StudentClass: el.StudentClass,
-                    section: el.section,
-                    active: el.active
-
-                })
-
-            })
-
-            return res.status(200).json(data)
-
-        }
-
-        const targetedMonth = classDoc.months.find(sec => sec.section === section);
-
-
-        const attendanceData = matchedData
-            .map(s => {
-                const matched = attendance.find(a => a.id === s.id);
-                if (matched) {
-                    return { ...s, status: matched.status };
-                }
-                return null;
-            })
-            .filter(Boolean); // remove nulls
-
-        attendanceData.map((el) => {
-
-            data.push({
-
-                id: el.id,
-                firstName: el.firstName,
-                midName: el.midName,
-                lastName: el.lastName,
-                Roll_no: el.Roll_no,
-                StudentClass: el.StudentClass,
-                section: el.section,
-                active: el.active,
-                status: el.status
-
-            })
-
-        })
-
-
-
-
-
-
-
-    }
-    catch (error) {
-
-        return res.status(500).json({ message: "Internal server Error" })
-
-    }
-}
 
 
 // faculty
-
-// export const addNewStaff = async (req, res) => {
-
-//     const {
-
-//         firstName,
-//         midName,
-//         lastName,
-//         gender,
-//         dob,
-//         email,
-//         phone,
-//         altphone,
-
-
-
-//         branch,
-//         roles,
-
-
-//     } = req.body;
-
-
-//     if (branch == 'Academic Staff') {
-
-
-
-
-//     } else {
-
-//     }
-
-
-
-
-
-// }
 
 
 export const addNewStaff = async (req, res) => {
@@ -1809,7 +1616,7 @@ export const addNewStaff = async (req, res) => {
             error: error.message,
         });
     }
-};
+}
 
 
 export const showAllStaff = async (req, res) => {
@@ -1848,8 +1655,7 @@ export const showAllStaff = async (req, res) => {
             error: error.message,
         });
     }
-};
-
+}
 
 
 export const getAcademicStaffFormData = async (req, res) => {
@@ -1880,7 +1686,7 @@ export const getAcademicStaffFormData = async (req, res) => {
         console.error("Error fetching academic staff details:", error);
         return res.status(500).json({ success: false, message: "Server error" });
     }
-};
+}
 
 
 export const getGeneralStaffFormData = async (req, res) => {
@@ -1913,7 +1719,7 @@ export const getGeneralStaffFormData = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server error" });
 
     }
-};
+}
 
 
 export const updateGeneralStaffFormData = async (req, res) => {
@@ -1959,10 +1765,7 @@ export const updateGeneralStaffFormData = async (req, res) => {
         console.error("Error updating staff:", error);
         return res.status(500).json({ success: false, message: "Server error" });
     }
-};
-
-
-
+}
 
 // PUT /api/academic-staff/:id
 export const updateAcademicStaffFormData = async (req, res) => {
@@ -2098,67 +1901,6 @@ export const updateAcademicStaffFormData = async (req, res) => {
 // faculty attendance
 
 
-
-// export const updateStaffAttendance = async (req, res) => {
-//     try {
-//         const { id, month, year, attendance } = req.body; // from frontend
-
-//         if (!id || !month || !year || !attendance) {
-//             return res.status(400).json({ message: "Missing required fields" });
-//         }
-
-//         // Convert attendance object → array
-//         const attendanceArray = Object.entries(attendance).map(([date, status]) => ({
-//             date,
-//             status: status || "",
-//         }));
-
-//         // Step 1: Check if month-year record exists
-//         let record = await StaffAttendance.findOne({ month, year });
-
-//         if (record) {
-//             // Step 2: Check if staff exists inside this month-year
-//             const staffIndex = record.staffs.findIndex(
-//                 (staff) => staff.staffId.toString() === id
-//             );
-
-//             if (staffIndex > -1) {
-//                 // Staff exists → update attendance
-//                 record.staffs[staffIndex].attendance = attendanceArray;
-//             } else {
-//                 // Staff does not exist → push new staff entry
-//                 record.staffs.push({
-//                     staffId: id,
-//                     attendance: attendanceArray,
-//                 });
-//             }
-
-//             await record.save();
-//         } else {
-//             // Step 3: Month-year does not exist → create new record
-//             record = new StaffAttendance({
-//                 month,
-//                 year,
-//                 staffs: [
-//                     {
-//                         staffId: id,
-//                         attendance: attendanceArray,
-//                     },
-//                 ],
-//             });
-
-//             await record.save();
-//         }
-
-//         res.status(200).json({
-//             message: "Attendance updated successfully",
-//             data: record,
-//         });
-//     } catch (error) {
-//         console.error("Error updating attendance:", error);
-//         res.status(500).json({ message: "Server error", error: error.message });
-//     }
-// };
 
 export const updateStaffAttendance = async (req, res) => {
     try {
@@ -3328,18 +3070,6 @@ export const testingElement = async (req, res) => {
 
         console.log("Data inserted successfully");
 
-        // const form = new FormData();
-        // form.append('file', file.buffer, {
-        //     filename: file.originalname,
-        //     contentType: file.mimetype
-        // });
-
-        // const response = await axios.post('http://localhost:5001/extract', form, {
-        //     headers: form.getHeaders()
-        // });
-
-        // res.json(response.data);
-        // res.status(201).json(ress);
         res.status(200).json({ message: 'Submitted succesfully' });
 
     } catch (error) {

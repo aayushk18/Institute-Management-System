@@ -49,16 +49,16 @@ const AddNewFaculty2 = () => {
         { label: "Employee ID", key: "employeeId", type: "text", colSpan: 1 },
         { label: "Employment Type", key: "employmentType", type: "select", options: [{ val: "Select" }, { val: "Permanent" }, { val: "Contract" }, { val: "Outsourced" }], colSpan: 1 },
         { label: "Reporting Authority", key: "reportingAuthority", type: "text", colSpan: 2 },
-        { label: "Basic Salary", key: "salaryDetails.basic", type: "number", colSpan: 1 },
-        { label: "HRA", key: "salaryDetails.hra", type: "number", colSpan: 1 },
-        { label: "Allowances", key: "salaryDetails.allowances", type: "number", colSpan: 1 },
+        { label: "Basic Salary", key: "salaryDetails_basic", type: "number", colSpan: 1 },
+        { label: "HRA", key: "salaryDetails_hra", type: "number", colSpan: 1 },
+        { label: "Allowances", key: "salaryDetails_allowances", type: "number", colSpan: 1 },
     ]
 
     const systemAccess = [
         // 5. Login & System Access
         { label: "Username", key: "username", type: "text", colSpan: 1 },
         { label: "Password", key: "password", type: "password", colSpan: 1 },
-        { label: "Role", key: "role", type: "select", options: ["Staff", "Admin"], colSpan: 1 },
+        { label: "Role", key: "role", type: "select", options: [{ val: "Select" }, { val: "Staff" }, { val: "Admin" }], colSpan: 1 },
         { label: "Access Permissions (comma-separated)", key: "accessPermissions", type: "text", colSpan: 2 },
     ]
     const documentUploads = [
@@ -96,6 +96,12 @@ const AddNewFaculty2 = () => {
 
         Data.data.dob = Data.data.dob.split('T')[0]
         setFormData(Data.data)
+
+        if (Data.data.workHistory) {
+            setPreviousInstitutions(Data.data?.workHistory)
+
+        }
+
         console.log(formData);
 
     }
@@ -184,7 +190,7 @@ const AddNewFaculty2 = () => {
         e.preventDefault();
         const fullData = {
             ...formData,
-            previousInstitutions,
+            workHistory: previousInstitutions,
             subjects,
             assignedClasses: selectedClasses,
         };
@@ -422,9 +428,9 @@ const AddNewFaculty2 = () => {
                                     </div>
                                 ))}
                                 <div className="col-span-3 row-span-2 border p-4 rounded-md shadow-md overflow-y-auto max-h-60">
-                                    <h3 className="font-semibold mb-2">Previous Institutions</h3>
+                                    <h3 className="font-semibold mb-2">Previous Work Experiences</h3>
                                     <div className="flex flex-col md:flex-row gap-2 mb-2">
-                                        <input name="name" placeholder="Institution Name" value={newInstitution.name} onChange={handleInstitutionChange} className="input flex-1" />
+                                        <input name="name" placeholder="Organisation Name" value={newInstitution.name} onChange={handleInstitutionChange} className="input flex-1" />
                                         <input name="position" placeholder="Position" value={newInstitution.position} onChange={handleInstitutionChange} className="input flex-1" />
                                         <input name="duration" placeholder="Duration" value={newInstitution.duration} onChange={handleInstitutionChange} className="input flex-1" />
                                         <button type="button" onClick={addInstitution} className="bg-gray-500 text-white px-4 py-2 rounded">Add</button>

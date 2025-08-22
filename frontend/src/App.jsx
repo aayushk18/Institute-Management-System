@@ -55,17 +55,12 @@ import ExaminationDatesheet from './components/dashboards/AdminComponents/Academ
 import SubjectAdmin from './components/dashboards/AdminComponents/Academic/Subjects/SubjectAdmin'
 import FacultyAttendanceTable from './components/dashboards/AdminComponents/Faculty/FacultyAttendanceTable'
 import StaffTable from './components/dashboards/AdminComponents/Faculty/StaffTable'
+import StaffProfile from './components/dashboards/AdminComponents/Faculty/StaffProfile'
+import AdminStudentAttendanceTable from './components/dashboards/AdminComponents/Student/AdminStudentAttendanceTable'
 
 
 
-
-
-
-
-
-
-
-function App() {
+const App = () => {
 
 
   const { authUser, userType, checkAuth, isCheckAuth } = useAuthStore();
@@ -115,12 +110,14 @@ function App() {
             <Route path='students' element={<StudentAdminHome />} />
             <Route path='new-student' element={<AddStudent />} />
             <Route path='update-student/:userid' element={<EditStudent />} />
-            <Route path='attendance' element={<AdminStudentAttendance />} />
+            <Route path='attendance' element={<AdminStudentAttendanceTable />} />
+            <Route path='attendance/:userid' element={<AdminStudentAttendance />} />
 
 
           </Route>
           <Route path='faculties' element={<StaffAdminComponent />}>
             <Route path='all-staff' element={<StaffTable />} />
+            <Route path='all-staff/profile/:userid' element={<StaffProfile />} />
             <Route path='new-staff' element={<AddNewFaculty />} />
             <Route path='academic-staff/:userid' element={<AddNewFaculty1 />} />
             <Route path='general-staff/:userid' element={<AddNewFaculty2 />} />

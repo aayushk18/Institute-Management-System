@@ -71,7 +71,13 @@ const academicStaffSchema = new mongoose.Schema({
     salaryDetails_experienceLetters: [String],
     salaryDetails_policeVerification: { type: String },
 
-
+    // 6. Bank Detials 
+    accountHolderName: { type: String },
+    bankName: { type: String },
+    accountNumber: { type: String },
+    ifscCode: { type: String },
+    branch: { type: String },
+    accountType: { type: String },
 
     classRange: [String],
 

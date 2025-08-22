@@ -13,10 +13,19 @@ const studentSchema = new mongoose.Schema({
 })
 
 
+const classSchema = new mongoose.Schema({
+    StudentClass: { type: String },
+    section: { type: String },
+    students: [studentSchema]
+
+})
+
+
 const studentAttendanceSchema = new mongoose.Schema({
     month: { type: Number },
     year: { type: Number },
-    students: [studentSchema]
+    classes: [classSchema]
+
 }, { timestamps: true })
 
 

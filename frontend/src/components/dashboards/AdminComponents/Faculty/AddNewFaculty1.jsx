@@ -32,9 +32,8 @@ const AddNewFaculty1 = () => {
     const qualifications = [
         { label: "Highest Qualification", key: "highestQualification", type: "text", colSpan: 1 },
         { label: "Specialization", key: "specialization", type: "text", colSpan: 1 },
-        { label: "Other Certifications", key: "otherCertifications", type: "text", colSpan: 2 },
+        { label: "Other Certifications", key: "otherCertifications", type: "text", colSpan: 1 },
         { label: "Years of Experience", key: "yearsOfExperience", type: "number", colSpan: 1 },
-        { label: "Subject Expertise", key: "subjectExpertise", type: "text", colSpan: 2 },
     ]
     const employmentDetails = [
         { label: "Designation", key: "designation", type: "text", colSpan: 1 },
@@ -43,6 +42,10 @@ const AddNewFaculty1 = () => {
         { label: "Employee ID", key: "employeeId", type: "text", colSpan: 1 },
         { label: "Employment Type", key: "employmentType", type: "select", options: [{ val: "Permanent" }, { val: "Contract" }, { val: "Guest" }], colSpan: 1 },
         { label: "Reporting Authority", key: "reportingAuthority", type: "text", colSpan: 2 },
+        { label: "Basic Salary", key: "salaryDetails_basic", type: "number", colSpan: 1 },
+        { label: "HRA", key: "salaryDetails_hra", type: "number", colSpan: 1 },
+        { label: "Allowances", key: "salaryDetails_allowances", type: "number", colSpan: 1 },
+
     ]
     const systemAccess = [
         { label: "Username", key: "username", type: "text", colSpan: 1 },
@@ -98,7 +101,9 @@ const AddNewFaculty1 = () => {
         const response = await axiosInstance.post('/user/admin/faculty/academic-staff-form', data)
         const Data = response.data;
         console.log(Data.data);
-
+        setSubjects(Data.data.subjectExpertise)
+        setSelectedClasses(Data.data.classRange)
+        setPreviousInstitutions(Data.data.previousInstitutions)
         Data.data.dob = Data.data.dob.split('T')[0]
         console.log(Data.data);
         setFormData(Data.data)
@@ -174,8 +179,8 @@ const AddNewFaculty1 = () => {
         const fullData = {
             ...formData,
             previousInstitutions,
-            subjects,
-            assignedClasses: selectedClasses,
+            subjectExpertise: subjects,
+            classRange: selectedClasses,
         };
 
         console.log('Submitted Data:', fullData);
@@ -220,7 +225,7 @@ const AddNewFaculty1 = () => {
 
                                     <div className=' h-full flex justify-center items-center text-center'>
                                         <h3 className="text-xl self-center font-semibold text-gray-700 ">
-                                            Z Details
+                                            Person Details
                                         </h3>
                                     </div>
 
@@ -504,6 +509,8 @@ const AddNewFaculty1 = () => {
                                             )}
                                         </div>
                                     ))}
+
+
                                     <div className="col-span-3 row-span-2 border border-gray-300 p-4 rounded-md   overflow-y-auto max-h-60">
                                         <h3 className="font-semibold mb-2">Previous Institutions</h3>
                                         <div className="flex flex-col md:flex-row gap-2 mb-2">
