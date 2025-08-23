@@ -1211,113 +1211,87 @@ export const UploadGuardianpic = async (req, res) => {
 
 // student attendance
 export const UpdateStudentAttendance = async (req, res) => {
-
-
-
     try {
-        const { StudentClass, section, studentId, date, status, month, year } = req.body;
+        const { StudentClass, section, studentId, attendance, month, year } = req.body;
 
-        if (!StudentClass || !date || !status || month === undefined || year === undefined) {
-            return res.status(400).json({ message: "Missing required fields" });
+        // Convert attendance object into array format
+        const attendanceArray = Object.entries(attendance).map(([date, status]) => ({
+            date,
+            status
+        }));
+
+        // Step 1: Find or create attendance record for the month & year
+        let record = await StudentAttendance.findOne({ month, year });
+        if (!record) {
+            record = new StudentAttendance({ month, year, classes: [] });
         }
 
-        // 1️⃣ Find the attendance document for given month & year
-        let attendanceDoc = await StudentAttendance.findOne({ month, year });
-
-        // If not exists → create fresh doc
-        if (!attendanceDoc) {
-            attendanceDoc = new StudentAttendance({
-                month,
-                year,
-                classes: [],
-            });
-        }
-
-        // 2️⃣ Find the class & section inside this doc
-        let classData = attendanceDoc.classes.find(
-            (c) => c.StudentClass === StudentClass && c.section === section
+        // Step 2: Find class inside "classes"
+        let classDoc = record.classes.find(
+            (cls) => cls.StudentClass === StudentClass && cls.section === section
         );
-
-        if (!classData) {
-            classData = {
-                StudentClass,
-                section,
-                students: [],
-            };
-            attendanceDoc.classes.push(classData);
+        if (!classDoc) {
+            classDoc = { StudentClass, section, students: [] };
+            record.classes.push(classDoc);
         }
 
-        // 3️⃣ Find student inside class
-        let studentData = classData.students.find(
-            (s) => String(s.studentId) === String(studentId)
+        // Step 3: Find student inside class
+        let studentDoc = classDoc.students.find(
+            (stu) => stu.studentId.toString() === studentId.toString()
         );
-
-        if (!studentData) {
-            studentData = {
-                studentId,
-                attendance: [],
-            };
-            classData.students.push(studentData);
-        }
-
-        // 4️⃣ Update or Insert attendance for this date
-        const existingDay = studentData.attendance.find((a) => a.date === date);
-
-        if (existingDay) {
-            existingDay.status = status; // update status if already exists
+        if (!studentDoc) {
+            classDoc.students.push({ studentId, attendance: attendanceArray });
         } else {
-            studentData.attendance.push({ date, status });
+            // Update attendance
+            studentDoc.attendance = attendanceArray;
         }
 
-        // 5️⃣ Save final document
-        await attendanceDoc.save();
+        // Step 4: Save
+        await record.save();
 
-        return res.status(200).json({
-            success: true,
-            message: "Attendance updated successfully",
-            data: attendanceDoc,
-        });
-    } catch (err) {
-        console.error("Error updating attendance:", err);
-        return res.status(500).json({
-            success: false,
-            message: "Server error",
-            error: err.message,
-        });
+        res.status(200).json({ message: "Attendance updated successfully", data: record });
+    } catch (error) {
+        console.error("Error updating attendance:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 
 export const getOneStudentAttendance = async (req, res) => {
     try {
 
-        const { studentId, month, year, classId, section } = req.query;
+        const { studentId, month, year, StudentClass, section } = req.body;
+        console.log('step 1');
 
-        if (!studentId || month === undefined || year === undefined || !classId || !section) {
+
+        if (!studentId || month === undefined || year === undefined || !StudentClass || !section) {
             return res.status(400).json({ message: "Missing required fields" });
         }
-
+        console.log('step 2');
         const attendanceDoc = await StudentAttendance.findOne({ month, year });
 
         if (!attendanceDoc) {
             return res.status(404).json({ message: "No attendance found for this month/year" });
         }
 
+        console.log('step 3');
         const classData = attendanceDoc.classes.find(
-            (c) => c.StudentClass === classId && c.section === section
+            (c) => c.StudentClass === StudentClass && c.section === section
         );
+        console.log(classData);
 
         if (!classData) {
             return res.status(404).json({ message: "Class/Section not found in this record" });
         }
-
+        console.log('step 4');
         const studentData = classData.students.find(
             (s) => String(s.studentId) === String(studentId)
         );
 
+
         if (!studentData) {
             return res.status(404).json({ message: "Student not found in this class/section" });
         }
-
+        console.log('step 5');
         return res.status(200).json({
             success: true,
             studentId: studentData.studentId,
