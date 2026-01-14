@@ -72,7 +72,7 @@ const StaffTable = () => {
     return (
         <div className=" ">
             {/* Top Row */}
-            <div className="flex flex-wrap items-center justify-between my-10 space-y-2 sm:space-y-0 sm:flex-nowrap">
+            <div className="flex flex-wrap items-center justify-between my-5 space-y-2 sm:space-y-0 sm:flex-nowrap">
                 {/* Dropdown */}
                 <select
                     className=" p-5 bg-white shadow-md   border-t-1 border-gray-200 rounded"

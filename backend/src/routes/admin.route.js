@@ -9,7 +9,7 @@ import path from 'path';
 
 
 
-export const router = express.Router()
+ const router = express.Router()
 
 
 
@@ -19,15 +19,15 @@ const doc_storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './files/documents'); // Make sure this folder exists
     },
+
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'document' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
+
 });
 
 const pic_storage = multer.diskStorage({
-
-
     destination: (req, file, cb) => {
         cb(null, './files/pics'); // Make sure this folder exists
     },
@@ -35,10 +35,10 @@ const pic_storage = multer.diskStorage({
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'picture' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
+
 });
 
 const faculty_pic_storage = multer.diskStorage({
-
     destination: (req, file, cb) => {
         cb(null, './files/faculty_pics'); // Make sure this folder exists
     },
@@ -46,22 +46,21 @@ const faculty_pic_storage = multer.diskStorage({
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'picture' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
+
 });
 
 const faculty_doc_storage = multer.diskStorage({
-
-
     destination: (req, file, cb) => {
         cb(null, './files/faculty_documents'); // Make sure this folder exists
-    },
+    }, 
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'document' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
+
 });
 
 const teacher_pic_storage = multer.diskStorage({
-
     destination: (req, file, cb) => {
         cb(null, './files/teacher_pics'); // Make sure this folder exists
     },
@@ -69,11 +68,10 @@ const teacher_pic_storage = multer.diskStorage({
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'picture' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
+
 });
 
 const teacher_doc_storage = multer.diskStorage({
-
-
     destination: (req, file, cb) => {
         cb(null, './files/teacher_documents'); // Make sure this folder exists
     },
@@ -81,6 +79,7 @@ const teacher_doc_storage = multer.diskStorage({
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'document' + '-' + uniqueSuffix + path.extname(file.originalname));
     }
+
 });
 
 const pic_upload = multer({ storage: pic_storage });
@@ -96,95 +95,65 @@ const teacher_doc_upload = multer({ storage: teacher_doc_storage });
 
 try {
 
-    router.post('/login', login)
-    router.get("/check", protectRoute, checkAuth)
-    router.post('/logout', logout)
-
+    
+  
 
     //extra data
 
-
-    router.get('/admin/home', homeDashboardData)
-
-
+    router.get('/home', homeDashboardData)
 
 
     // admin
 
-    router.post('/admin/resetrollno', resetrollno)
-    router.post('/admin/newstudent', AddStudentAccount)// checked
-    router.get('/admin/getstudents', getAllStudents)// checked
-    router.post('/admin/set-timetable-students', setTimetableForClass)
-    router.post('/admin/newstaff', AddNewStaff)//checked
-    router.patch('/admin/updateprofile', updateAdmin)//checked
+    router.post('/resetrollno', resetrollno)
+    router.post('/newstudent', AddStudentAccount)// checked
+    router.get('/getstudents', getAllStudents)// checked
+    router.post('/set-timetable-students', setTimetableForClass)
+    router.post('/newstaff', AddNewStaff)//checked
+    router.patch('/updateprofile', updateAdmin)//checked
 
 
     //admin admission
 
-    router.post('/admin/admission/newregistration', addNewRegistration)
-    router.get('/admin/admission/getallregistration', showAllNewRegistration)
-    router.post('/admin/admission/get-registration-user', showRegistrationUser)
-    router.post('/admin/admission/updateregistration1', updateStudentRegistrationDetails)
-    router.post('/admin/admission/updateregistration2', updateParentRegistrationDetails)
-    router.post('/admin/admission/updateregistration3', updateOthertRegistrationDetails)
+    router.post('/admission/newregistration', addNewRegistration)
+    router.get('/admission/getallregistration', showAllNewRegistration)
+    router.post('/admission/get-registration-user', showRegistrationUser)
+    router.post('/admission/updateregistration1', updateStudentRegistrationDetails)
+    router.post('/admission/updateregistration2', updateParentRegistrationDetails)
+    router.post('/admission/updateregistration3', updateOthertRegistrationDetails)
 
 
-    router.put('/admin/admission/newregistration/student-pic', pic_upload.single('file'), UploadStudentpic)
-    router.put('/admin/admission/newregistration/father-pic', pic_upload.single('file'), UploadFatherpic)
-    router.put('/admin/admission/newregistration/mother-pic', pic_upload.single('file'), UploadMotherpic)
-    router.put('/admin/admission/newregistration/guardian-pic', pic_upload.single('file'), UploadGuardianpic)
+    router.put('/admission/newregistration/student-pic', pic_upload.single('file'), UploadStudentpic)
+    router.put('/admission/newregistration/father-pic', pic_upload.single('file'), UploadFatherpic)
+    router.put('/admission/newregistration/mother-pic', pic_upload.single('file'), UploadMotherpic)
+    router.put('/admission/newregistration/guardian-pic', pic_upload.single('file'), UploadGuardianpic)
 
-
-
-    // router.put('/admin/testing', pic_upload.single('file'), testing)
 
     // admin faculty
 
-    router.post('/admin/faculty/newregistration', addNewStaff)
-    router.post('/admin/faculty/all-staff', showAllStaff)
-    router.post('/admin/faculty/update-attendance', updateStaffAttendance)
-    router.post('/admin/faculty/get-general-staff-attendance', getGeneralStaffAttendance)
-    router.post('/admin/faculty/academic-staff-form', getAcademicStaffFormData)
-    router.post('/admin/faculty/general-staff-form', getGeneralStaffFormData)
+    router.post('/faculty/newregistration', addNewStaff)
+    router.post('/faculty/all-staff', showAllStaff)
+    router.post('/faculty/update-attendance', updateStaffAttendance)
+    router.post('/faculty/get-general-staff-attendance', getGeneralStaffAttendance)
+    router.post('/faculty/academic-staff-form', getAcademicStaffFormData)
+    router.post('/faculty/general-staff-form', getGeneralStaffFormData)
+
+
+    router.post('/faculty/update-general-staff-form', updateGeneralStaffFormData)
+    router.post('/faculty/update-academic-staff-form', updateAcademicStaffFormData)
 
 
 
-    router.post('/admin/faculty/update-general-staff-form', updateGeneralStaffFormData)
-    router.post('/admin/faculty/update-academic-staff-form', updateAcademicStaffFormData)
+    router.post('/students/active', ActivateStudent)
+    router.post('/students/inactive', InactivateStudent)
+    router.post('/students/classes/update-class', setStudentsForClass)
+    router.post('/students/classes/getstudentofclass', getStudentsForClass)
+    router.post('/students/classes/get-class', getStudentsFromClass)
+    router.post('/students/classes/get-class-data', getClassData)
+    router.post('/students/attendance/get-student-attendance', getOneStudentAttendance)
+    router.post('/students/attendance/update-student-attendance', UpdateStudentAttendance)
 
-
-    // teacher
-    router.post('/update-marks', uploadTestMarks)//checked
-    router.post('/update-result', uploadResult)
-    router.get('/check-homework', homeworkUpdateToTeacher)
-    router.post('/upload-homework', AddHomework)// checked
-    router.get('/timetable', findTimetableforTeacher)
-    router.get('/students', showStudents)// checked
-
-
-    //student
-    router.post('/uploadhomework', uploadHomework)
-    router.get('/homeworks', showHomeworks)//checkd
-    router.get('/timetable', findTimetableforStudent)
-
-
-    router.post('/admin/students/active', ActivateStudent)
-    router.post('/admin/students/inactive', InactivateStudent)
-    router.post('/admin/students/classes/update-class', setStudentsForClass)
-    router.post('/admin/students/classes/getstudentofclass', getStudentsForClass)
-    router.post('/admin/students/classes/get-class', getStudentsFromClass)
-    router.post('/admin/students/classes/get-class-data', getClassData)
-
-
-    router.post('/admin/students/attendance/get-student-attendance', getOneStudentAttendance)
-    router.post('/admin/students/attendance/update-student-attendance', UpdateStudentAttendance)
-
-
-
-
-
-    router.post('/admin/testing', testing)
-
+    router.post('/testing', testing)
 
 
 } catch (error) {
@@ -192,3 +161,8 @@ try {
     console.log('Error in admin routing', error.message);
 
 }
+
+
+
+
+export default router;

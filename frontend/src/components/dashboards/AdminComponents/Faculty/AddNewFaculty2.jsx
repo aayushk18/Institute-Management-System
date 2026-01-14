@@ -193,6 +193,7 @@ const AddNewFaculty2 = () => {
             workHistory: previousInstitutions,
             subjects,
             assignedClasses: selectedClasses,
+            userType: "staff"
         };
         console.log('Submitted Data:', fullData);
         const Data = {

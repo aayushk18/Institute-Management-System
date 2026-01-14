@@ -40,7 +40,6 @@ const studentSchema = new mongoose.Schema({
         type: String
 
     },
-
     dob: {
         type: String
     },
@@ -55,7 +54,6 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
     StudentClass: {
         type: String
     },

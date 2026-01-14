@@ -1,10 +1,22 @@
-import { checkAuth, login, logout } from "../controllers/auth.controller"
-import { protectRoute } from "../middlewares/auth.middleware"
+import express from "express"
+import { checkAuth, login, logout } from "../controllers/auth.controller.js"
+import { protectRoute } from "../middlewares/auth.middleware.js"
 
 
+ const router = express.Router()
+
+try {
+
+    
+    router.post('/login', login)
+    router.get("/check", protectRoute, checkAuth)
+    router.post('/logout', logout)
+
+    
+} catch (error) {
+    console.log('Error in auth routing', error.message);
+
+}
 
 
-// router.post('/login', login)
-// router.get("/check", protectRoute, checkAuth)
-// router.post('/logout', logout)
-
+export default router;

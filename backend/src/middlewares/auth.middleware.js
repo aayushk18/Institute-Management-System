@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 import { Admin } from "../models/admin.model.js";
+import { Student } from "../models/student.model.js";
+import { AcademicStaff } from "../models/academicStaff.model.js";
+import { Staff } from "../models/staff.model.js";
 
 export const protectRoute = async (req, res, next) => {
     try {
@@ -9,21 +12,31 @@ export const protectRoute = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({ message: "Unauthorized - No token Provided" })
         }
+        console.log("token", req.cookies.jwt);
+
 
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+
+
         if (!decoded) {
             return res.status(401).json({ message: "Unauthorized - Invalid Token" })
         }
 
-        const user = await Admin.findById(decoded.userId).select("-password")
-        if (!user) {
-            return res.status(401).json({ message: "User not found" })
+        const adminUser = await Admin.findById(decoded.userId).select("-password")
+        const staffUser = await Staff.findById(decoded.userId).select("-password")
+        const academicStaffUser = await AcademicStaff.findById(decoded.userId).select("-password")
+        const studentUser = await Student.findById(decoded.userId).select("-password")
 
-        }
+        if (adminUser) { req.user = adminUser }
+        else if (staffUser) { req.user = staffUser }
+        else if (academicStaffUser) { req.user = academicStaffUser }
+        else if (studentUser) { req.user = studentUser }
+        else return res.status(401).json({ message: "User not found" })
 
-        req.user = user
-        next()
+        next();
+
     } catch (error) {
         console.log("Error in protect router middleware", error.message)
         res.status(500).json({ message: "Internal server error" })

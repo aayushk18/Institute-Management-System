@@ -1,12 +1,12 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import { connectDB } from './src/utils/db.js'
-import { router } from './src/routes/admin.route.js'
 import cookieParser from 'cookie-parser'
 import { checkAuth } from './src/controllers/auth.controller.js'
 import cors from 'cors';
 import bodyParser from 'body-parser'
 import path from 'path';
+import router from './src/routes/main.router.js'
 
 
 
@@ -28,8 +28,9 @@ app.use(cors({
 }));
 
 
+app.use('/api/user/', router)
 
-app.use('/api/user', router)
+
 
 
 app.use('/documents', express.static(path.join(path.resolve(), 'files', 'documents')));
@@ -42,7 +43,7 @@ app.use('/pics', express.static(path.join(path.resolve(), 'files', 'pics')));
 
 app.listen(PORT, (req, res) => {
 
-    console.log("app is ready to run!!! at http://localhost:3000")
+    console.log( `app is ready to run!!! at http://localhost:${PORT}`)
     connectDB()
     // testingElement()
 

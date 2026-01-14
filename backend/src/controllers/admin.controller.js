@@ -6,13 +6,10 @@ import { Classes } from "../models/class.model.js";
 import { Staff } from "../models/staff.model.js";
 import { NewRegistration } from "../models/NewRegistration.model.js";
 import { StaffAttendance } from "../models/staffAttendance.model.js";
-import { Event } from "../models/event.model.js";
-import { StudentAttendance } from "../models/studentAttendance.model.js";
+ import { StudentAttendance } from "../models/studentAttendance.model.js";
 import mongoose from "mongoose";
 import { ClassSyllabus } from "../models/classSyllabus.model.js";
 import { AcademicStaff } from "../models/academicStaff.model.js";
-
-
 
 
 
@@ -1210,6 +1207,7 @@ export const UploadGuardianpic = async (req, res) => {
 
 
 // student attendance
+
 export const UpdateStudentAttendance = async (req, res) => {
     try {
         const { StudentClass, section, studentId, attendance, month, year } = req.body;
@@ -1313,6 +1311,7 @@ export const getOneStudentAttendance = async (req, res) => {
 
 
 // only display class students
+
 export const getStudentsFromClass = async (req, res) => {
     const { StudentClass, section } = req.body;
 
@@ -1351,7 +1350,9 @@ export const getStudentsFromClass = async (req, res) => {
 
 }
 
+
 // set class students
+
 export const setStudentsForClass = async (req, res) => {
 
     const { StudentClass, section, data } = req.body;
@@ -1523,8 +1524,7 @@ export const getClassData = async (req, res) => {
 
 
 
-// faculty
-
+// faculty 
 
 export const addNewStaff = async (req, res) => {
     try {
@@ -1545,7 +1545,7 @@ export const addNewStaff = async (req, res) => {
 
         if (branch === "Academic Staff") {
 
-            // Academic staff
+
             newStaff = new AcademicStaff({
                 firstName,
                 midName,
@@ -1561,7 +1561,7 @@ export const addNewStaff = async (req, res) => {
             });
         } else {
 
-            // Non-academic/general staff
+
             newStaff = new Staff({
                 firstName,
                 midName,
@@ -1592,20 +1592,19 @@ export const addNewStaff = async (req, res) => {
     }
 }
 
-
 export const showAllStaff = async (req, res) => {
     try {
-        // Academic staff (uses phone field)
+
         const academicStaff = await AcademicStaff.find().select(
             "id firstName midName lastName phone email staffType designation"
         );
 
-        // General staff (uses mobile instead of phone)
+
         const generalStaff = await Staff.find().select(
             "id firstName midName lastName phone email staffType designation"
         );
 
-        // Normalize general staff to have `phone` instead of `mobile`
+
         const generalStaffFormatted = generalStaff.map((staff) => ({
             id: staff.id,
             firstName: staff.firstName,
@@ -1631,7 +1630,6 @@ export const showAllStaff = async (req, res) => {
     }
 }
 
-
 export const getAcademicStaffFormData = async (req, res) => {
     try {
         const { id } = req.body;
@@ -1640,7 +1638,7 @@ export const getAcademicStaffFormData = async (req, res) => {
             return res.status(400).json({ success: false, message: "Academic Staff ID is required" });
         }
 
-        // validate ObjectId
+
         if (!id.match(/^[0-9a-fA-F]{24}$/)) {
             return res.status(400).json({ success: false, message: "Invalid Academic Staff ID format" });
         }
@@ -1651,7 +1649,7 @@ export const getAcademicStaffFormData = async (req, res) => {
             return res.status(404).json({ success: false, message: "Academic Staff not found" });
         }
 
-        // Exclude sensitive fields (like password) before sending response
+
         const staffResponse = academicStaffData.toObject();
         delete staffResponse.password;
 
@@ -1661,7 +1659,6 @@ export const getAcademicStaffFormData = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server error" });
     }
 }
-
 
 export const getGeneralStaffFormData = async (req, res) => {
     try {
@@ -1682,7 +1679,9 @@ export const getGeneralStaffFormData = async (req, res) => {
         const staffData = await Staff.findById(id);
 
         if (!staffData) {
+
             return res.status(404).json({ success: false, message: "Staff not found" });
+      
         }
 
         return res.status(200).json({ success: true, data: staffData });
@@ -1695,7 +1694,6 @@ export const getGeneralStaffFormData = async (req, res) => {
     }
 }
 
-
 export const updateGeneralStaffFormData = async (req, res) => {
     try {
         const { id, updateData } = req.body;
@@ -1703,18 +1701,25 @@ export const updateGeneralStaffFormData = async (req, res) => {
 
 
 
+
+
         if (!id) {
             return res.status(400).json({ success: false, message: "Staff ID is required" });
         }
 
-        // validate MongoDB ObjectId format
+
         if (!id.match(/^[0-9a-fA-F]{24}$/)) {
             return res.status(400).json({ success: false, message: "Invalid Staff ID format" });
         }
 
-        // prevent password from being updated directly
+
+        let hashedPassword = ''
         if (updateData.password) {
-            delete updateData.password;
+
+            const salt = await bycrypt.genSalt(10)
+            hashedPassword = await bycrypt.hash(updateData.password, salt)
+            updateData.password = hashedPassword
+
         }
 
         const updatedStaff = await Staff.findByIdAndUpdate(
@@ -1742,115 +1747,37 @@ export const updateGeneralStaffFormData = async (req, res) => {
 }
 
 // PUT /api/academic-staff/:id
+
 export const updateAcademicStaffFormData = async (req, res) => {
     try {
         const { id, updateData } = req.body;
         console.log(updateData);
 
-        {
-
-            // firstName: { type: String, },
-            // midName: { type: String, },
-            // lastName: { type: String, },
-            // gender: { type: String, },
-            // dob: { type: Date },
-            // nationality: { type: String },
-            // maritalStatus: { type: String, }
-            // bloodGroup: { type: String },
-            // photo: { type: String }, // store file path or URL
-            // signature: { type: String }, // store file path or URL
-
-
-
-            // // 2. Contact Information
-            // phone: { type: String },
-            // altPhone: { type: String },
-            // email: { type: String, },
-            // presentAddress: { type: String },
-            // permanentAddress: { type: String },
-
-
-
-            // // 3. Academic & Professional Qualifications
-            // highestQualification: { type: String },
-            // specialization: { type: String },
-            // otherCertifications: [String],
-            // yearsOfExperience: { type: Number },
-            // previousInstitutions: [{
-            //     name: String,
-            //     position: String,
-            //     duration: String
-            // }],
-            // subjectExpertise: [String],
-
-
-
-            // // 4. Employment Details
-            // staffType: { type: String },
-            // designation: { type: String },
-            // department: { type: String },
-            // dateOfJoining: { type: Date },
-            // employeeId: { type: String },
-            // employmentType: { type: String },
-            // reportingAuthority: { type: String },
-            // salaryDetails: {
-            //     basic: { type: Number },
-            //     hra: { type: Number },
-            //     allowances: { type: Number }
-            // },
-
-
-
-            // // 5. Login & System Access
-            // username: { type: String },
-            // password: { type: String },
-            // role: { type: String },
-            // accessPermissions: [String],
-
-
-            // // 6. Documents Upload
-            // documents: {
-            //     resume: { type: String },
-            //     idProof: { type: String },
-            //     qualificationCertificates: [String],
-            //     experienceLetters: [String],
-            //     policeVerification: { type: String },
-            // },
-
-
-            // classRange: [String],
-
-
-            // classes: [
-            //     { StudentClass: { type: String } },
-            //     { subject: { type: String } }
-            // ],
-
-
-
-        }
-
-
-
-
         if (!id) {
             return res.status(400).json({ success: false, message: "Academic Staff ID is required" });
         }
 
-        // Validate ObjectId
+
         if (!id.match(/^[0-9a-fA-F]{24}$/)) {
             return res.status(400).json({ success: false, message: "Invalid Academic Staff ID format" });
         }
 
-        // Prevent direct password overwrite unless explicitly allowed
+
+        let hashedPassword = ''
         if (updateData.password) {
-            delete updateData.password;
+
+            const salt = await bycrypt.genSalt(10)
+            hashedPassword = await bycrypt.hash(updateData.password, salt)
+            updateData.password = hashedPassword
+
+
         }
+
 
         const updatedStaff = await AcademicStaff.findByIdAndUpdate(
             id,
             { $set: updateData },
-            { new: true, runValidators: true } // return updated doc, apply schema validation
+            { new: true, runValidators: true } 
         );
 
         if (!updatedStaff) {
@@ -1872,29 +1799,25 @@ export const updateAcademicStaffFormData = async (req, res) => {
 };
 
 
-// faculty attendance
-
-
+// faculty attendance 
 
 export const updateStaffAttendance = async (req, res) => {
     try {
-        const { id, staffModel, month, year, attendance } = req.body; // from frontend
+        const { id, staffModel, month, year, attendance } = req.body; 
 
         if (!id || !staffModel || !month || !year || !attendance) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
-        // Convert attendance object → array
-        const attendanceArray = Object.entries(attendance).map(([date, status]) => ({
+         const attendanceArray = Object.entries(attendance).map(([date, status]) => ({
             date,
             status: status || "",
         }));
 
-        // Step 1: Check if month-year record exists
-        let record = await StaffAttendance.findOne({ month, year });
+         let record = await StaffAttendance.findOne({ month, year });
 
         if (record) {
-            // Step 2: Check if staff exists inside this month-year
+
             const staffIndex = record.staffs.findIndex(
                 (staff) =>
                     staff.staffId.toString() === id &&
@@ -1902,10 +1825,10 @@ export const updateStaffAttendance = async (req, res) => {
             );
 
             if (staffIndex > -1) {
-                // Staff exists → update attendance
+
                 record.staffs[staffIndex].attendance = attendanceArray;
             } else {
-                // Staff does not exist → push new staff entry
+
                 record.staffs.push({
                     staffId: id,
                     staffModel,
@@ -1915,7 +1838,7 @@ export const updateStaffAttendance = async (req, res) => {
 
             await record.save();
         } else {
-            // Step 3: Month-year does not exist → create new record
+
             record = new StaffAttendance({
                 month,
                 year,
@@ -1936,8 +1859,10 @@ export const updateStaffAttendance = async (req, res) => {
             data: record,
         });
     } catch (error) {
+
         console.error("Error updating attendance:", error);
         res.status(500).json({ message: "Server error", error: error.message });
+
     }
 };
 
@@ -1949,15 +1874,15 @@ export const getStaffAttendance = async (req, res) => {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
-        // Step 1: Find month-year record
+      
         const record = await StaffAttendance.findOne({ month, year })
             .populate("staffs.staffId"); // dynamic ref via refPath
 
         if (!record) {
-            return res.status(200).json(false); // no month-year record
+            return res.status(200).json(false); 
         }
 
-        // Step 2: Check if staffId exists inside staffs[]
+       
         const staffData = record.staffs.find(
             (staff) => staff.staffId && staff.staffId._id.toString() === id
         );
@@ -1966,7 +1891,7 @@ export const getStaffAttendance = async (req, res) => {
             return res.status(200).json(false); // staff not found in this month-year
         }
 
-        // Step 3: Return staff attendance
+      
         return res.status(200).json({
             month: record.month,
             year: record.year,
@@ -1978,7 +1903,6 @@ export const getStaffAttendance = async (req, res) => {
     }
 };
 
-
 export const getGeneralStaffAttendance = async (req, res) => {
     try {
         const { id, month, year } = req.body;
@@ -1987,7 +1911,7 @@ export const getGeneralStaffAttendance = async (req, res) => {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
-        // Step 1: Find month-year record
+   
         const record = await StaffAttendance.findOne({ month, year })
             .populate("staffs.staffId");
 
@@ -2061,40 +1985,41 @@ export const getAcademicStaffAttendance = async (req, res) => {
 export const testing = async (req, res) => {
 
     try {
-        const { StudentClass } = req.body; // get class from request params
+        // const { StudentClass } = req.body; // get class from request params
+console.log("error");
 
-        const result = await ClassSyllabus.aggregate([
-            { $match: { StudentClass } },
-            {
-                $project: {
-                    _id: 0,
-                    syllabus: {
-                        $map: {
-                            input: "$syllabus",
-                            as: "stream",
-                            in: {
-                                stream: "$$stream.stream",
-                                subjects: {
-                                    $map: {
-                                        input: "$$stream.subjects",
-                                        as: "subject",
-                                        in: {
-                                            subject: "$$subject.subject"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        ]);
+        // const result = await ClassSyllabus.aggregate([
+        //     { $match: { StudentClass } },
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             syllabus: {
+        //                 $map: {
+        //                     input: "$syllabus",
+        //                     as: "stream",
+        //                     in: {
+        //                         stream: "$$stream.stream",
+        //                         subjects: {
+        //                             $map: {
+        //                                 input: "$$stream.subjects",
+        //                                 as: "subject",
+        //                                 in: {
+        //                                     subject: "$$subject.subject"
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // ]);
 
-        if (!result || result.length === 0) {
-            return res.status(404).json({ message: "Class not found" });
-        }
+        // if (!result || result.length === 0) {
+        //     return res.status(404).json({ message: "Class not found" });
+        // }
 
-        return res.status(200).json(result[0].syllabus);
+        // return res.status(200).json(result[0].syllabus);
     } catch (error) {
         console.error("Error fetching syllabus:", error);
         return res.status(500).json({ message: "Internal server error" });

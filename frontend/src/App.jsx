@@ -65,8 +65,6 @@ const App = () => {
 
   const { authUser, userType, checkAuth, isCheckAuth } = useAuthStore();
 
-  const { registrationForm } = useAdminStore()
-
 
   useEffect(() => {
     checkAuth()
@@ -76,7 +74,6 @@ const App = () => {
   if (isCheckAuth && !authUser) return (
     <div className='flex items-center justify-center h-screen'>
       <Loader className='size-20 animate-spin' />
-
     </div>
   )
 
@@ -96,7 +93,7 @@ const App = () => {
 
       < Routes>
 
-        <Route path='/' element={userType ? (userType == 'admin' ? <Navigate to='/admin' /> : (userType == 'teacher' ? <Navigate to='/staff' /> : (userType == 'student' ? <Navigate to='/student' /> : (authUser.userType == 'parent' ? <Navigate to='/parent' /> : <Navigate to='/login' />)))) : <Navigate to='/login' />}></Route>
+        <Route path='/' element={userType ? (userType == 'admin' ? <Navigate to='/admin' /> : (userType == 'staff' ? <Navigate to='/staff' /> : (userType == 'student' ? <Navigate to='/student' /> : (authUser.userType == 'parent' ? <Navigate to='/parent' /> : <Navigate to='/login' />)))) : <Navigate to='/login' />}></Route>
         <Route path='/login' element={!userType ? <Login /> : <Navigate to='/' />} />\
         {/* <Route path='/admissions' element={<Login />} /> */}
 

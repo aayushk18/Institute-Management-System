@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const academicStaffSchema = new mongoose.Schema({
 
 
+
     // 1. Personal Details
     firstName: { type: String, },
     midName: { type: String, },
@@ -10,7 +11,7 @@ const academicStaffSchema = new mongoose.Schema({
     gender: { type: String, },
     dob: { type: Date },
     nationality: { type: String },
-    maritalStatus: { type: String, }, //enum: ['Single', 'Married', 'Divorced', 'Widowed']
+    maritalStatus: { type: String, },  
     bloodGroup: { type: String },
     photo: { type: String }, // store file path or URL
     signature: { type: String }, // store file path or URL
@@ -31,30 +32,29 @@ const academicStaffSchema = new mongoose.Schema({
     specialization: { type: String },
     otherCertifications: [String],
     yearsOfExperience: { type: Number },
-    previousInstitutions: [{
-        name: String,
-        position: String,
-        duration: String
+    previousInstitutions: [{  
+        name: String,    
+        position: String, 
+        duration: String  
     }],
     subjectExpertise: [String],
 
 
 
     // 4. Employment Details
+    userType: { type: String },
     staffType: { type: String },
     designation: { type: String },
     department: { type: String },
     dateOfJoining: { type: Date },
     employeeId: { type: String },
     employmentType: { type: String },
-    reportingAuthority: { type: String },
-
+    reportingAuthority: { type: String }, 
     salaryDetails_basic: { type: Number },
     salaryDetails_hra: { type: Number },
     salaryDetails_allowances: { type: Number },
 
-
-
+ 
 
     // 5. Login & System Access
     username: { type: String },
@@ -63,13 +63,15 @@ const academicStaffSchema = new mongoose.Schema({
     accessPermissions: [String],
 
 
-    // 6. Documents Upload
 
+    // 6. Documents Upload
     salaryDetails_resume: { type: String },
     salaryDetails_idProof: { type: String },
     salaryDetails_qualificationCertificates: [String],
     salaryDetails_experienceLetters: [String],
     salaryDetails_policeVerification: { type: String },
+
+
 
     // 6. Bank Detials 
     accountHolderName: { type: String },
@@ -79,19 +81,13 @@ const academicStaffSchema = new mongoose.Schema({
     branch: { type: String },
     accountType: { type: String },
 
-    classRange: [String],
-
-
+    classRange: [String], 
     classes: [
         { StudentClass: { type: String } },
         { subject: { type: String } }
     ],
 
-
-
-
-
-
+ 
 
 }, {
     timestamps: true

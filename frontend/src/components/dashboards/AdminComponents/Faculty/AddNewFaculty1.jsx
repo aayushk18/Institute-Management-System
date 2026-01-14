@@ -84,6 +84,7 @@ const AddNewFaculty1 = () => {
         permanentAddress: '',
 
 
+
     });
 
 
@@ -181,6 +182,7 @@ const AddNewFaculty1 = () => {
             previousInstitutions,
             subjectExpertise: subjects,
             classRange: selectedClasses,
+            userType: "staff"
         };
 
         console.log('Submitted Data:', fullData);

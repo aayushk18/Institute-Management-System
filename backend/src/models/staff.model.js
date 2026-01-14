@@ -22,6 +22,7 @@ const staffSchema = new mongoose.Schema({
     permanentAddress: { type: String },
 
     // 3. Employment Details
+    userType: { type: String },
     staffType: { type: String, },
     department: { type: String },
     designation: { type: String },

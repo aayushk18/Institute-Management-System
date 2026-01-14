@@ -26,10 +26,13 @@ export const useAuthStore = create((set) => ({
     checkAuth: async () => {
 
         try {
-            const res = await axiosInstance.get('/user/check')
+            const res = await axiosInstance.get('/user/auth/check')
 
             set({ userType: res.data.userType });
             set({ authUser: res.data });
+
+
+
 
 
 
@@ -49,7 +52,7 @@ export const useAuthStore = create((set) => ({
         try {
             console.log("logiing out");
 
-            await axiosInstance.post('/user/logout');
+            await axiosInstance.post('/user/auth/logout');
             set({ authUser: null });
             set({ userType: null });
 
@@ -64,7 +67,7 @@ export const useAuthStore = create((set) => ({
         set({ isLoggingIn: true })
         try {
             console.log(data);
-            const res = await axiosInstance.post("/user/login", data)
+            const res = await axiosInstance.post("/user/auth/login", data)
             set({ userType: res.data.userType });
             set({ setUser: res.data });
 
@@ -509,6 +512,12 @@ export const useAdminStore = create((set) => ({
     },
 
 
+
+
+
+}))
+
+export const useStaffStore = create((set) => ({
 
 
 
