@@ -132,6 +132,8 @@ const App = () => {
               <Route path='' element={<AcademicActiveClasses />} ></Route>
               <Route path='update-class' element={<AcademicEditClasses />} />
 
+
+
             </Route>
             <Route path='subjects' element={<SubjectAdmin />} />
             <Route path='timetable' element={<TimetableAdmin />} />
