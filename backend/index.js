@@ -35,10 +35,10 @@ app.use(cors({
 
 
 
-router.use("api/user/auth/",  authRouter);
-router.use("api/user/admin/", adminRouter);
-router.use("api/user/student/", studentRouter);
-router.use("api/user/teacher/", teacherRouter);
+app.use("/api/user/auth/",  authRouter);
+app.use("/api/user/admin/", adminRouter);
+app.use("/api/user/student/", studentRouter);
+app.use("/api/user/teacher/", teacherRouter);
 
 
 
