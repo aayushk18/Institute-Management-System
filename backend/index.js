@@ -7,7 +7,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser'
 import path from 'path';
 import router from './src/routes/main.router.js'
-import path from 'path'
+
 
 
 
