@@ -7,6 +7,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser'
 import path from 'path';
 import router from './src/routes/main.router.js'
+import path from 'path'
 
 
 
@@ -17,6 +18,7 @@ dotenv.config()
 
 const app = express()
 const PORT = process.env.port || 3000
+const __dirname = path.resolve();
 
 
 app.use(express.json({ limit: '10mb' }))
@@ -38,7 +40,10 @@ app.use('/pics', express.static(path.join(path.resolve(), 'files', 'pics')));
 
 
 
-// app.use('/api/auth', login, router)
+if (process.env.NODE_ENV == "production") {
+    
+    app.use(express.static(path.join(__dirname,"../frontend/dist")))
+}
 
 
 app.listen(PORT, (req, res) => {
