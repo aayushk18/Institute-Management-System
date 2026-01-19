@@ -6,7 +6,10 @@ import { checkAuth } from './src/controllers/auth.controller.js'
 import cors from 'cors';
 import bodyParser from 'body-parser'
 import path from 'path';
-import router from './src/routes/main.router.js'
+import adminRouter from "./src/routes/admin.route.js";
+import authRouter from "./src/routes/auth.route.js";
+import studentRouter from "./src/routes/student.route.js";
+import teacherRouter from "./src/routes/teacher.route.js";
 
 
 
@@ -30,7 +33,11 @@ app.use(cors({
 }));
 
 
-app.use('/api/user/', router)
+
+router.use("api/user/auth/", authRouter);
+router.use("api/user/admin/", adminRouter);
+router.use("api/user/student/", studentRouter);
+router.use("api/user/teacher/", teacherRouter);
 
 
 
