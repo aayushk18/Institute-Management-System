@@ -20,7 +20,7 @@ import NoticeAdminComponent from './components/dashboards/AdminComponents/Notice
 import ReportAdminComponent from './components/dashboards/AdminComponents/ReportAdminComponent'
 import PaymentAdminComponent from './components/dashboards/AdminComponents/PaymentAdminComponent'
 import ClassesAdminComponent from './components/dashboards/AdminComponents/ClassesAdminComponent'
-import TimetableAdmin from './components/dashboards/AdminComponents/TimetableAdmin'
+import ResourcesAdmin from './components/dashboards/AdminComponents/ResourcesAdmin'
 import AttendanceAdmin from './components/dashboards/AdminComponents/AttendanceAdmin'
 import ExaminationAdmin from './components/dashboards/AdminComponents/ExaminationAdmin'
 import StudentAdminHome from './components/dashboards/AdminComponents/StudentAdminHome'
@@ -57,6 +57,8 @@ import FacultyAttendanceTable from './components/dashboards/AdminComponents/Facu
 import StaffTable from './components/dashboards/AdminComponents/Faculty/StaffTable'
 import StaffProfile from './components/dashboards/AdminComponents/Faculty/StaffProfile'
 import AdminStudentAttendanceTable from './components/dashboards/AdminComponents/Student/AdminStudentAttendanceTable'
+import ShowAllPdfs from './components/dashboards/AdminComponents/Academic/Resources/ShowAllPdfs'
+import AddResources from './components/dashboards/AdminComponents/Academic/Resources/AddResources'
 
 
 
@@ -136,7 +138,10 @@ const App = () => {
 
             </Route>
             <Route path='subjects' element={<SubjectAdmin />} />
-            <Route path='timetable' element={<TimetableAdmin />} />
+            <Route path="resources" element={<ResourcesAdmin />} >
+              <Route index element={<ShowAllPdfs />} />
+              <Route path="add-materials" element={<AddResources />} />
+            </Route>
             <Route path='attendance' element={<AttendanceAdmin />} />
 
             <Route path='result' element={<AttendanceAdmin />}>

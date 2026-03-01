@@ -32,7 +32,7 @@ const AdminStudentAttendanceTable = () => {
     const sections = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     const filteredStudents = studentsData.filter(student => {
-        const matchesSearch = `${student.rollno} ${student.firstName}${student.lastName || ''} ${student.fatherName}`.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = `${student.Roll_no} ${student.firstName}${student.lastName || ''} ${student.fatherName}`.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesClass = selectedClass ? student.StudentClass === selectedClass : true;
         const matchesSection = selectedSection ? student.section === selectedSection : true;
         return matchesSearch && matchesClass && matchesSection;
@@ -135,16 +135,16 @@ const AdminStudentAttendanceTable = () => {
                                 {currentEntries.map((student, index) => (
                                     <tr key={student.sno} className="text-center text-black">
                                         <td className="p-2 border-b">{(currentPage - 1) * entriesPerPage + index + 1}</td>
-                                        <td className="p-2 border-b">{student.rollno}</td>
+                                        <td className="p-2 border-b">{student.Roll_no}</td>
                                         <td className="p-2  cursor-pointer border-b">
-                                            <button onClick={() => navigate(`/admin/student/${student.firstName}-${student.lastName}-${student.rollno}`, { state: { pass: student } })} >{student.firstName} {student.lastName}</button>
+                                            <button onClick={() => navigate(`/admin/student/${student.firstName}-${student.lastName}-${student.Roll_no}`, { state: { pass: student } })} >{student.firstName} {student.lastName}</button>
                                         </td>
                                         <td className="p-2 cursor-pointer border-b">
-                                            <button onClick={() => navigate(`/admin/student/${student.firstName}-${student.lastName}-${student.rollno}`, { state: { pass: student } })} >{student.fatherName}</button>
+                                            <button onClick={() => navigate(`/admin/student/${student.firstName}-${student.lastName}-${student.Roll_no}`, { state: { pass: student } })} >{student.fatherName}</button>
                                         </td>
                                         <td className="p-2 border-b">75%</td>
                                         <td className="p-2 border-b">
-                                            <button onClick={() => navigate(`/admin/student/attendance/${student.firstName}-${student.rollno}`, { state: { pass: student } })} className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md">View Attendance</button>
+                                            <button onClick={() => navigate(`/admin/student/attendance/${student.firstName}-${student.Roll_no}`, { state: { pass: student } })} className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md">View Attendance</button>
                                         </td>
                                         <td className="p-2 border-b">
                                             <span className={`h-3 w-3 inline-block rounded-full ${student.active ? 'bg-green-500' : 'bg-red-500'}`}></span>

@@ -18,12 +18,12 @@ const Navbar = () => {
         { label: "Admissions", to: "/admin/admissions", icon: FilePlus },
         { label: "Examination", to: "/admin/examination", icon: ClipboardList },
 
-        { label: "Fees & Payments", to: "/admin/payments", icon: CreditCard },
-        { label: "Notice & Circular", to: "/admin/notice", icon: Megaphone },
-        { label: "Library", to: "/admin/library", icon: Library },
-        { label: "Reports & Analytics", to: "/admin/reports-analytics", icon: BarChart3 },
-        { label: "Settings", to: "/admin/settings", icon: Settings },
-        { label: "Feedback", to: "/admin/feedback", icon: MessageSquare },
+        // { label: "Fees & Payments", to: "/admin/payments", icon: CreditCard },
+        // { label: "Notice & Circular", to: "/admin/notice", icon: Megaphone },
+        // { label: "Library", to: "/admin/library", icon: Library },
+        // { label: "Reports & Analytics", to: "/admin/reports-analytics", icon: BarChart3 },
+        // { label: "Settings", to: "/admin/settings", icon: Settings },
+        // { label: "Feedback", to: "/admin/feedback", icon: MessageSquare },
 
     ];
 

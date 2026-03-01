@@ -42,7 +42,7 @@ const AdminDashboard = () => {
             </div>
             <div className='w-full h-screen '>
 
-
+                {/* This is the topbar */}
                 <div className='bg-white justify-between content-center  flex flex-row mb-1 h-16 gap-5 shadow-md shadow-gray-200  p-5 w-full'>
 
                     <div className='content-center pl-10'>

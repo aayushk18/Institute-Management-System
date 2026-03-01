@@ -389,6 +389,8 @@ export const useAdminStore = create((set) => ({
 
 
 
+
+
     showRegistrationUser: async (Data) => {
         try {
 
@@ -509,6 +511,46 @@ export const useAdminStore = create((set) => ({
             toast.error(error.response.data.message)
         }
 
+    },
+
+
+
+
+
+
+
+
+
+
+    getPdfResources: async () => {
+        try {
+
+
+            const res = await axiosInstance.get('/user/admin/academics/materials/get-pdf')
+            const data = await res.data
+            const Data = data.data;
+            console.log(Data);
+
+
+            return Data;
+
+        } catch (error) {
+            toast.error("Error in getPdfResources", error.response.data.message)
+        }
+
+    },
+
+    addPdfResource: async (data) => {
+        try {
+            console.log(data);
+            const res = await axiosInstance.post('/user/admin/academics/materials/add-pdf', data)
+            toast.success("PDF Resource Added Successfully")
+
+
+
+        } catch (error) {
+            toast.error("Error in addPdfResource", error.response.data.message)
+        }
     },
 
 

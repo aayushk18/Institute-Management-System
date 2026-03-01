@@ -1,6 +1,9 @@
 import express from "express"
 import { checkAuth, login, logout } from "../controllers/auth.controller.js";
-import { AddNewStaff, AddStudentAccount, getAllStudents, resetrollno, setTimetableForClass, testing, updateAdmin, addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic, addNewStaff, ActivateStudent, InactivateStudent, setStudentsForClass, getStudentsForClass, getStudentsFromClass, getClassData, showAllStaff, homeDashboardData, updateStaffAttendance, getGeneralStaffAttendance, getAcademicStaffFormData, getGeneralStaffFormData, updateAcademicStaffFormData, updateGeneralStaffFormData, UpdateStudentAttendance, getOneStudentAttendance } from "../controllers/admin.controller.js";
+import { AddStudentAccount, getAllStudents, resetrollno, testing, updateAdmin, addNewStaff, ActivateStudent, InactivateStudent, showAllStaff, homeDashboardData, updateStaffAttendance, getGeneralStaffAttendance, getAcademicStaffFormData, getGeneralStaffFormData, updateAcademicStaffFormData, updateGeneralStaffFormData, UpdateStudentAttendance, getOneStudentAttendance, addPdfToStudyMaterial, getAllStudyMaterials, updatePdfByDetails } from "../controllers/admin.controller.js";
+import { addNewClass, getStudentsFromClass, setStudentsForClass, getStudentsForClass, getClassData } from "../controllers/class.controller.js";
+import { setTimetableForClass } from "../controllers/timetable.controller.js";
+import { addNewRegistration, showAllNewRegistration, updateStudentRegistrationDetails, updateParentRegistrationDetails, updateOthertRegistrationDetails, showRegistrationUser, UploadStudentpic, UploadMotherpic, UploadGuardianpic, UploadFatherpic } from "../controllers/admission.controller.js";
 import { AddHomework, findTimetableforTeacher, homeworkUpdateToTeacher, showStudents, uploadResult, uploadTestMarks } from "../controllers/staff.controller.js";
 import { findTimetableforStudent, showHomeworks, uploadHomework } from "../controllers/student.controller.js";
 import { protectRoute } from "../middlewares/auth.middleware.js";
@@ -9,7 +12,7 @@ import path from 'path';
 
 
 
- const router = express.Router()
+const router = express.Router()
 
 
 
@@ -52,7 +55,7 @@ const faculty_pic_storage = multer.diskStorage({
 const faculty_doc_storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './files/faculty_documents'); // Make sure this folder exists
-    }, 
+    },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + 'document' + '-' + uniqueSuffix + path.extname(file.originalname));
@@ -95,8 +98,8 @@ const teacher_doc_upload = multer({ storage: teacher_doc_storage });
 
 try {
 
-    
-  
+
+
 
     //extra data
 
@@ -109,7 +112,7 @@ try {
     router.post('/newstudent', AddStudentAccount)// checked
     router.get('/getstudents', getAllStudents)// checked
     router.post('/set-timetable-students', setTimetableForClass)
-    router.post('/newstaff', AddNewStaff)//checked
+    router.post('/newstaff', addNewStaff)//checked
     router.patch('/updateprofile', updateAdmin)//checked
 
 
@@ -152,6 +155,13 @@ try {
     router.post('/students/classes/get-class-data', getClassData)
     router.post('/students/attendance/get-student-attendance', getOneStudentAttendance)
     router.post('/students/attendance/update-student-attendance', UpdateStudentAttendance)
+
+    // academics
+
+
+    router.post("/academics/materials/add-pdf", addPdfToStudyMaterial);
+    router.get("/academics/materials/get-pdf", getAllStudyMaterials);
+    router.put("/academics/materials/update-pdf", updatePdfByDetails);
 
     router.post('/testing', testing)
 

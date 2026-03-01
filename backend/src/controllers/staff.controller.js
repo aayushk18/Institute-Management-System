@@ -90,7 +90,7 @@ export const homeworkUpdateToTeacher = async (req, res) => {
 
         firstName: user.firstName,
         lastName: user.lastName,
-        rollno: user.rollno,
+
         assignmentUpdate: user.assignment,
         assignment: user.assignment
 
