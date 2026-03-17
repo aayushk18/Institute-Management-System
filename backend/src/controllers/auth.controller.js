@@ -46,9 +46,7 @@ export const login = async (req, res) => {
                 })
             } else return res.status(400).json({ message: "Invalid a loginID or Password !!" })
 
-        }
-
-        else if (student) {
+        } else if (student) {
 
             const IsPassCorrectStudent = await bycrypt.compare(password, student.password)
             if (student && IsPassCorrectStudent) {
@@ -104,6 +102,8 @@ export const login = async (req, res) => {
             } else return res.status(400).json({ message: "Invalid staff loginID or Password !!" })
 
         } else return res.status(400).json({ message: "Invalid LoginID or Password !!" })
+
+
         console.log("Login Successfully");
     } catch (error) {
         console.log("error in Login controller", error.message)

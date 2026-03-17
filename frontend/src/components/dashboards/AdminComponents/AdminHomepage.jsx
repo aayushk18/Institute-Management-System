@@ -70,6 +70,7 @@ const AdminHomepage = () => {
 
         const response = await axiosInstance.get('/user/admin/home')
         const data = response.data;
+
         return data;
 
     }

@@ -115,6 +115,7 @@ const App = () => {
 
           </Route>
           <Route path='faculties' element={<StaffAdminComponent />}>
+            <Route index element={<Navigate to='all-staff' />} />
             <Route path='all-staff' element={<StaffTable />} />
             <Route path='all-staff/profile/:userid' element={<StaffProfile />} />
             <Route path='new-staff' element={<AddNewFaculty />} />
@@ -130,6 +131,7 @@ const App = () => {
 
           </Route>
           <Route path='academics' element={<AcademicsAdminDashboard />}>
+            <Route index element={<Navigate to='classes' />} />
             <Route path='classes' element={<ClassesAdminComponent />} >
               <Route path='' element={<AcademicActiveClasses />} ></Route>
               <Route path='update-class' element={<AcademicEditClasses />} />
@@ -149,6 +151,7 @@ const App = () => {
 
           </Route>
           <Route path='examination' element={<ExaminationAdmin />} >
+            <Route index element={<Navigate to='datesheet' />} />
             <Route path='datesheet' element={<ExaminationDatesheet />} />
           </Route>
           <Route path='notice' element={<NoticeAdminComponent />} />
